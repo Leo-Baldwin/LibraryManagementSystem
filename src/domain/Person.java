@@ -5,8 +5,8 @@ import java.util.UUID;
 /**
  * Abstract superclass that represents a person within the library system.
  * <p>
- * <Provides the shared identity and contact attributes for all subclasses,
- * such as {@link Member} and {@link Librarian}.
+ *     Provides the shared identity and contact attributes for all subclasses,
+ *     such as {@link Member} and {@link Librarian}.
  * </p>
  */
 public abstract class Person {
