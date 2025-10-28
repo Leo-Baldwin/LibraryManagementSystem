@@ -72,6 +72,6 @@ public abstract class Person {
      */
     @Override
     public String toString() {
-        return "Name: " + name + " \nEmail: " + email;
+        return "Name: " + name + "\nEmail: " + email;
     }
 }

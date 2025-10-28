@@ -58,7 +58,7 @@ public abstract class MediaItem {
     }
 
     /**
-     * Method to show whether the media item is currently available to be borrowed.
+     * Indicates whether the media item is currently available to be borrowed.
      *
      * @return true if the status is AVAILABLE; false if not.
      */
@@ -68,10 +68,12 @@ public abstract class MediaItem {
 
     /**
      * Returns a human-readable string representing the item.
-     * @return a string containing the class name and current status
+     * @return formatted string with the class name and current status
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [mediaId=" + mediaId + ", status=" + status + "]";
+        return getClass().getSimpleName() + ", \n" +
+                "MediaId: " + mediaId + ", \n" +
+                "Status: " + status;
     }
 }
