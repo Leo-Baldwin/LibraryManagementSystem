@@ -21,7 +21,7 @@ public abstract class Person {
     private String email;
 
     /**
-     * Constructs a new Person instance object with a generated unique ID.
+     * Constructs a new Person instance with a generated unique ID.
      *
      * @param name the person's full name
      * @param email the person's email address; must contain '@'

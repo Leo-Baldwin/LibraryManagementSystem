@@ -68,7 +68,7 @@ public abstract class MediaItem {
 
     /**
      * Returns a human-readable string representing the item.
-     * @return formatted string with the class name and current status
+     * @return formatted string containing the class name and current status
      */
     @Override
     public String toString() {
