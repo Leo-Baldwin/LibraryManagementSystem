@@ -66,7 +66,7 @@ public abstract class Person {
     }
 
     /**
-     * Returns a short, readable string for this person.
+     * Returns a human-readable string representing this person.
      *
      * @return formatted string with name and email.
      */
