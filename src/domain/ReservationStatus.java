@@ -1,7 +1,7 @@
 package domain;
 
 /**
- * Represents the state of a Reservation within the library system.
+ * Represents the lifecycle state of a Reservation within the library system.
  */
 public enum ReservationStatus {
     ACTIVE,     // Reservation is active and awaiting availability

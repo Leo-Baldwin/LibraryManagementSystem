@@ -1,4 +1,4 @@
 package domain;
 
-public class Library   {
+public class Library {
 }

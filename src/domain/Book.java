@@ -5,16 +5,16 @@ import java.util.List;
 
 /** Concrete media type representing a book in the Library's collection.
  * <p>
- *     Extends {@link MediaItem} and adds metadata such as
+ *     Extends {@link MediaItem} and adds entity specific attributes such as
  *     title, authors, year of publication, and categories.
  * </p>
  */
-public class Book extends MediaItem{
+public class Book extends MediaItem {
 
     /** Title of the book. */
     private String title;
 
-    /** Authors full name. */
+    /** Full name of the author. */
     private String author;
 
     /** Year of publication (e.g., 2004). */
@@ -29,7 +29,7 @@ public class Book extends MediaItem{
      * @param title book title
      * @param author name of the author
      * @param yearOfPublish year of publication
-     * @param categories list of categories
+     * @param categories list of category labels
      */
     public Book(String title, String author, int yearOfPublish,  List<String> categories) {
         super();
@@ -96,7 +96,7 @@ public class Book extends MediaItem{
     public String toString() {
         return "Book: \n" +
                 "Title: " + title + "\n" +
-                "Authors: " + author + "\n" +
+                "Author: " + author + "\n" +
                 "Year of publish: " + yearOfPublish + "\n" +
                 "Categories: " + getCategories() + "\n" +
                 "Status: " + getStatus();

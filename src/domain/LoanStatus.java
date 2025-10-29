@@ -1,7 +1,7 @@
 package domain;
 
 /**
- * Represents the lifecycle state of a Loan within the library system.
+ * Represents the state of a Loan within the library system.
  */
 public enum LoanStatus {
     OUTSTANDING,    // Loan is currently active

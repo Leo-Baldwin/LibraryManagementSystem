@@ -5,41 +5,46 @@ import java.util.List;
 /**
  * Concrete media type representing a DVD in the Library's collection.
  * <p>
- *     Extends {@link MediaItem} with film-specific metadata such as
+ *     Extends {@link MediaItem} and adds entity specific attributes such as
  *     title, directors, age rating, and categories.
  * </p>
  */
-public class Dvd extends MediaItem{
+public class Dvd extends MediaItem {
 
-    /** Title of the DVD. */
+    /** Title of the Dvd. */
     private String title;
 
-    /** Duration of the DVD in minutes. */
+    /** Year of release. */
+    private int yearOfRelease;
+
+    /** Duration of the Dvd in minutes. */
     private int durationMinutes;
 
-    /** Age rating of the DVD. */
+    /** Age rating of the Dvd. */
     private String ageRating;
 
-    /** Category labels (e.g. 'Fiction', 'History'). */
+    /** Category labels (e.g. 'Horror', 'Comedy'). */
     private List<String> categories;
 
     /**
      * Constructs a Dvd with full metadata.
      *
-     * @param title DVD title
+     * @param title Dvd title
+     * @param yearOfRelease year of release
      * @param durationMinutes runtime in minutes
      * @param ageRating age rating label
-     * @param categories list of categories
+     * @param categories list of category labels
      */
-    public Dvd(String title, int durationMinutes, String ageRating, List<String> categories) {
+    public Dvd(String title, int yearOfRelease, int durationMinutes, String ageRating, List<String> categories) {
         super();
         setTitle(title);
+        setYearOfRelease(yearOfRelease);
         setDurationMinutes(durationMinutes);
         setAgeRating(ageRating);
         if  (categories != null) this.categories.addAll(categories);
     }
 
-    /** @return the DVDs title */
+    /** @return the Dvd's title */
     public String getTitle() {
         return title;
     }
@@ -50,6 +55,19 @@ public class Dvd extends MediaItem{
             throw new IllegalArgumentException("Title cannot be null or blank");
         }
         this.title = title;
+    }
+
+    /** @return the year of release (0 if unknown) */
+    public int getYearOfRelease() {
+        return yearOfRelease;
+    }
+
+    /** @param yearOfRelease non-negative year of release (0 if unknown) */
+    public void setYearOfRelease(int yearOfRelease) {
+        if (yearOfRelease < 0) {
+            throw new IllegalArgumentException("Year of release cannot be negative");
+        }
+        this.yearOfRelease = yearOfRelease;
     }
 
     /** @return the runtime in minutes */
