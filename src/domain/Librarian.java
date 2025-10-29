@@ -3,7 +3,7 @@ package domain;
 import java.util.UUID;
 
 /**
- * Represents a libraru staff member who can manage inventory and assist members within the system.
+ * Represents a library staff member who can manage inventory and assist members within the system.
  * <p>
  *     Extends the abstract {@link Person} class by adding a unique staff
  *     identifier. Librarians perform administrative operations such as adding
@@ -23,7 +23,7 @@ public class Librarian extends Person {
      */
     public Librarian(String name, String email) {
         super(name, email);
-        this.staffNum = UUID.randomUUID();
+        this.staffNum = UUID.randomUUID(); // Generates a random UUID number
     }
 
     /**

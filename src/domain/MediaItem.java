@@ -19,34 +19,25 @@ public abstract class MediaItem {
     /** Current availability status of the item. */
     private AvailabilityStatus status;
 
-    /**
-     * Constructs a new MediaItem with a generated unique identifier.
-     */
+    /** Constructs a new MediaItem with a generated unique identifier. */
     protected MediaItem() {
-        this.mediaId = UUID.randomUUID();
+        this.mediaId = UUID.randomUUID(); // Generates a random UUID number
         this.status = AvailabilityStatus.AVAILABLE;
     }
 
-    /**
-     * Returns the unique identifier of this item.
-     *
-     * @return UUID representing this media item
-     */
+    /** @return the UUID representing this media item */
     public UUID getMediaId() {
         return mediaId;
     }
 
-    /**
-     * Returns the current availability status of this item.
-     *
-     * @return the current {@link AvailabilityStatus}
-     */
+    /** @return the current {@link AvailabilityStatus} of this item */
     public AvailabilityStatus getStatus() {
         return status;
     }
 
     /**
      * Sets a new availability status for the media item.
+     *
      * @param status the new {@link AvailabilityStatus} to assign
      * @throws IllegalArgumentException if {@code status} is null
      */
@@ -60,16 +51,13 @@ public abstract class MediaItem {
     /**
      * Indicates whether the media item is currently available to be borrowed.
      *
-     * @return true if the status is AVAILABLE; false if not.
+     * @return true if the status is AVAILABLE; false if not
      */
     public boolean isAvailable() {
         return status == AvailabilityStatus.AVAILABLE;
     }
 
-    /**
-     * Returns a human-readable string representing the item.
-     * @return formatted string containing the class name and current status
-     */
+    /** @return a formatted string containing the id number and current status of this item */
     @Override
     public String toString() {
         return getClass().getSimpleName() + ", \n" +

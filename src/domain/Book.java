@@ -11,49 +11,40 @@ import java.util.List;
  */
 public class Book extends MediaItem{
 
-    /** The book's display title. */
+    /** Title of the book. */
     private String title;
 
-    /** List of author names. */
+    /** Authors full name. */
     private String author;
 
-    /** Year the book was published. */
+    /** Year of publication (e.g., 2004). */
     private int yearOfPublish;
 
-    /** Categories/genres (e.g. 'Fiction', 'History'). */
+    /** Category labels (e.g. 'Fiction', 'History'). */
     private List<String> categories = new ArrayList<>();
 
     /**
      * Constructs a Book with full metadata.
      *
-     * @param title
-     * @param author
-     * @param yearOfPublish
-     * @param categories
+     * @param title book title
+     * @param author name of the author
+     * @param yearOfPublish year of publication
+     * @param categories list of categories
      */
     public Book(String title, String author, int yearOfPublish,  List<String> categories) {
         super();
         setTitle(title);
         setAuthor(author);
         setYearOfPublish(yearOfPublish);
-        if  (categories != null) this.categories.addAll(categories);
+        setCategories(categories);
     }
 
-    /**
-     * Returns the book's title.
-     *
-     * @return title string
-     */
+    /** @return the books title */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Updates the books title.
-     *
-     * @param title new title, cannot be null or blank
-     * @throws IllegalArgumentException if {@code title} is null or blank
-     */
+    /** @param title new title; cannot be null/blank */
     public void setTitle(String title) {
         if ((title == null) || title.isBlank()) {
             throw new IllegalArgumentException("Title cannot be null or blank");
@@ -61,15 +52,12 @@ public class Book extends MediaItem{
         this.title = title;
     }
 
-    /**
-     * Returns the book's author.
-     *
-     * @return author string
-     */
+    /** @return the authors name */
     public String getAuthor() {
         return author;
     }
 
+    /** @param author new author name; cannot be null/blank */
     public void setAuthor(String author) {
         if ((author == null) || author.isBlank()) {
             throw new IllegalArgumentException("Author cannot be null or blank");
@@ -77,70 +65,38 @@ public class Book extends MediaItem{
         this.author = author;
     }
 
-    /**
-     * Returns the year of publication.
-     *
-     * @return publication year
-     */
+    /** @return the year of publication (0 if unknown) */
     public int getYearOfPublish() {
         return yearOfPublish;
     }
 
-    /**
-     * Sets the year of publication, use 0 if unknown.
-     *
-     * @param yearOfPublish publication year or 0 if unknown
-     */
+    /** @param yearOfPublish non-negative publication year (0 if unknown) */
     public void setYearOfPublish(int yearOfPublish) {
+        if  (yearOfPublish < 0) {
+            throw new IllegalArgumentException("Year of publish cannot be negative");
+        }
         this.yearOfPublish = yearOfPublish;
     }
 
-    /**
-     * Returns the categories list
-     *
-     * @return a copy of the list of catgories
-     */
+    /** @return a copy of the list of categories */
     public List<String> getCategories() {
         return List.copyOf(categories);
     }
 
-    /**
-     * Adds a category label to the list.
-     *
-     * @param category non-null or blank category name
-     * @throws IllegalArgumentException if {@code category} is null or blank
-     */
-    public void addCategory(String category) {
-        if  ((category == null) || category.isBlank()) {
-            throw new IllegalArgumentException("Category cannot be null or blank");
+    /** @param categories new list of category labels; cannot be null/empty */
+    public void setCategories(List<String> categories) {
+        if  (categories == null || categories.isEmpty()) {
+            throw new IllegalArgumentException("Categories cannot be null or empty");
         }
-        categories.add(category.trim());
+        this.categories.addAll(categories);
     }
 
-    /**
-     * Removes the first instance of a category label (if present).
-     *
-     * @param category not null/blank category label to remove from list
-     * @return {@code true} if removed successfully, {@code false} if category label not present
-     * @throws IllegalArgumentException if {@code category} is null or blank
-     */
-    public boolean removeCategory(String category) {
-        if  ((category == null) || category.isBlank()) {
-            throw new IllegalArgumentException("Category cannot be null or blank");
-        }
-        return categories.remove(category.trim());
-    }
-
-    /**
-     * Returns a human-readable string representing this book.
-     *
-     * @return formatted string including title, authors, and year of publish
-     */
+    /** @return a formatted string representing the book, including title and author */
     @Override
     public String toString() {
         return "Book: \n" +
                 "Title: " + title + "\n" +
-                "Authors: " + getAuthors() + "\n" +
+                "Authors: " + author + "\n" +
                 "Year of publish: " + yearOfPublish + "\n" +
                 "Categories: " + getCategories() + "\n" +
                 "Status: " + getStatus();

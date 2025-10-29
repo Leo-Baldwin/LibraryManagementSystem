@@ -10,7 +10,7 @@ package domain;
  */
 public class Member extends Person {
 
-    /** Indicates whether the person is currenctly an active member. */
+    /** Indicates whether the person is currently an active member. */
     private boolean activeMember;
 
     /**
@@ -36,19 +36,12 @@ public class Member extends Person {
         this.activeMember = activeMember;
     }
 
-    /** Returns whether the member's account is active.
-     *
-     * @return {@code true} if the member is active.
-     */
+    /** @return {@code true} if the member is active */
     public boolean isActiveMember() {
         return activeMember;
     }
 
-    /**
-     * Sets the members activity status.
-     *
-     * @param activeMember {@code true} to activate membership, {@code false} to deactivate
-     */
+    /** @param activeMember {@code true} to activate membership, {@code false} to deactivate */
     public void setActiveMember(boolean activeMember) {
         this.activeMember = activeMember;
     }
@@ -74,11 +67,7 @@ public class Member extends Person {
         return false; // Placeholder: replace with full functionality once all classes are built
     }
 
-    /**
-     * Returns a human-readable string representing this member.
-     *
-     * @return formatted string with name, email, and activity status
-     */
+    /** @return formatted string with name, email, and activity status */
     @Override
     public String toString() {
         return "Name: " + getName() + ", \n" +

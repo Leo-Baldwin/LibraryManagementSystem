@@ -28,23 +28,27 @@ public abstract class Person {
      * @throws IllegalArgumentException if the email is invalid
      */
     protected Person(String name, String email) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID(); // Generates a random UUID number
         this.name = name;
         setEmail(email); // validation handled in setter
     }
 
+    /** @return the UUID representing this person */
     public UUID getId() {
         return id;
     }
 
+    /** @return the persons full name */
     public String getName() {
         return name;
     }
 
+    /** @param name new full name */
     public void setName(String name) {
         this.name = name;
     }
 
+    /** @return the persons email */
     public String getEmail() {
         return email;
     }
@@ -56,7 +60,7 @@ public abstract class Person {
      * </p>
      *
      * @param email the new email address
-     * @throws IllegalArgumentException if the email is invalid.
+     * @throws IllegalArgumentException if the email is invalid
      */
     public void setEmail(String email) {
         if (email == null || !email.contains("@")) {
@@ -65,13 +69,10 @@ public abstract class Person {
         this.email = email;
     }
 
-    /**
-     * Returns a human-readable string representing this person.
-     *
-     * @return formatted string with name and email.
-     */
+    /** @return a formatted string representing the person, with name and email */
     @Override
     public String toString() {
-        return "Name: " + name + "\nEmail: " + email;
+        return "Name: " + name + "\n" +
+                "Email: " + email;
     }
 }
