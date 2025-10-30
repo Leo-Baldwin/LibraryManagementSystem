@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public abstract class Person {
 
-    /** Unique & immutable identifier for this person. */
+    /** Unique identifier for this person. */
     private final UUID id;
 
     /** Person's full name. */

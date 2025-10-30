@@ -13,10 +13,10 @@ import java.util.UUID;
  */
 public class Librarian extends Person {
 
-    /** Unique & immutable staff identifier for this librarian. */
+    /** Unique staff identifier for this librarian. */
     private final UUID staffNum;
 
-    /** Constructs a new Librarian instance with a generated staff number.
+    /** Constructs a new Librarian with a generated staff number.
      *
      * @param name the librarian's full name
      * @param email the librarian's contact email

@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public abstract class MediaItem {
 
-    /** Unique and immutable identifier for this media item. */
+    /** Unique identifier for this media item. */
     private final UUID mediaId;
 
     /** Current availability status of the item. */
