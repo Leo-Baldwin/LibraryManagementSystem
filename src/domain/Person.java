@@ -28,7 +28,7 @@ public abstract class Person {
      * @throws IllegalArgumentException if the email is invalid
      */
     protected Person(String name, String email) {
-        this.id = UUID.randomUUID(); // Generates a random UUID number
+        this.id = UUID.randomUUID(); // Generates a random unique identifier number
         this.name = name;
         setEmail(email); // validation handled in setter
     }

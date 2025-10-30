@@ -32,14 +32,14 @@ public class Loan {
     /** The date the item was returned, null until returned. */
     private LocalDate returnDate;
 
-    /** Current status of the loan. */
+    /** The current status of the loan. */
     private LoanStatus status;
 
     /** Fine accrued in pence; or 0 if no fine. */
     private int fineAccrued;
 
     /**
-     * Creates a new loan with a generated unique identifier.
+     * Creates a new OUTSTANDING loan with a generated unique identifier.
      *
      * @param memberId the borrowing members UUID
      * @param mediaId the UUID of the media item being borrowed
@@ -47,12 +47,12 @@ public class Loan {
      * @param dueDate the date the item is due to be returned
      */
     public Loan(UUID memberId, UUID mediaId, LocalDate loanDate, LocalDate dueDate) {
-        this.loanId = UUID.randomUUID();
+        this.loanId = UUID.randomUUID(); // Generate a random UUID number
         this.memberId = memberId;
         this.mediaId = mediaId;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
-        this.status = LoanStatus.OUTSTANDING; // Default state set to OUTSTANDING during initialisation
+        this.status = LoanStatus.OUTSTANDING; // Sets default state to OUTSTANDING
     }
 
     /**
@@ -102,17 +102,19 @@ public class Loan {
         this.fineAccrued = pence;
     }
 
-    /** @return the UUID of the loan */
+    // Getters
+
+    /** @return the unique loan ID */
     public UUID getLoanId() {
         return loanId;
     }
 
-    /** @return the UUID of the borrowing member */
+    /** @return the borrowing members ID */
     public UUID getMemberId() {
         return memberId;
     }
 
-    /** @return the UUID of the media being loaned */
+    /** @return the ID of the media item being borrowed */
     public UUID getMediaId() {
         return mediaId;
     }
@@ -149,7 +151,7 @@ public class Loan {
                 "LoanId: " + loanId + "\n" +
                 "MemberId: " + memberId + "\n" +
                 "MediaId: " + mediaId + "\n" +
-                "Loan Date: " + loanDate + "\n" +
+                "Start Date: " + loanDate + "\n" +
                 "Due Date: " + dueDate + "\n" +
                 "Status: " + status;
     }

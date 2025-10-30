@@ -21,7 +21,7 @@ public abstract class MediaItem {
 
     /** Constructs a new MediaItem with a generated unique identifier. */
     protected MediaItem() {
-        this.mediaId = UUID.randomUUID(); // Generates a random UUID number
+        this.mediaId = UUID.randomUUID(); // Generates a random unique identifier number
         this.status = AvailabilityStatus.AVAILABLE;
     }
 

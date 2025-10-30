@@ -23,7 +23,7 @@ public class Librarian extends Person {
      */
     public Librarian(String name, String email) {
         super(name, email);
-        this.staffNum = UUID.randomUUID(); // Generates a random UUID number
+        this.staffNum = UUID.randomUUID(); // Generates a random unique identifier number
     }
 
     /**
