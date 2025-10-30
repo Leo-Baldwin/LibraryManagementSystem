@@ -33,7 +33,7 @@ public class Loan {
     private LocalDate returnDate;
 
     /** Current status of the loan. */
-    private LoanStatus status = LoanStatus.OUTSTANDING;
+    private LoanStatus status;
 
     /** Fine accrued in pence; or 0 if no fine. */
     private int fineAccrued;
@@ -52,12 +52,13 @@ public class Loan {
         this.mediaId = mediaId;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
+        this.status = LoanStatus.OUTSTANDING; // Default state set to OUTSTANDING during initialisation
     }
 
     /**
      * Marks the loan status as returned and records the return date.
      * <p>
-     *     Sets {@link status} to {@link LoanStatus#RETURNED} and stores {@link #returnDate}.
+     *     Sets {@code status} to {@link LoanStatus#RETURNED} and stores {@link #returnDate}.
      *     Loan cannot be returned twice and the return date cannot be null.
      * </p>
      *
@@ -112,13 +113,11 @@ public class Loan {
     }
 
     /** @return the UUID of the media being loaned */
-     */
     public UUID getMediaId() {
         return mediaId;
     }
 
     /** @return the date the loan was issued */
-     */
     public LocalDate getLoanDate() {
         return loanDate;
     }
@@ -129,7 +128,7 @@ public class Loan {
     }
 
     /** @return the date the item was returned; null if not yet returned */
-    public UUID getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
