@@ -27,7 +27,7 @@ public class Library {
     private final Map<UUID, Member> members = new HashMap<>();
 
     /** All reservations by ID. */
-    private final Map<UUID, Reservation> reservations = new HashMap<>();
+    private final Map<UUID, Deque<Reservation>> reservationsByMediaItem = new HashMap<>();
 
     /** Policy for calculating due dates. */
     private final LoanPolicy loanPolicy;
@@ -82,14 +82,35 @@ public class Library {
         items.remove(mediaId);
     }
 
-    // ---------------------------------------- Members ----------------------------------------
+    // ---------------------------------------- Members --------------------------------------
 
+    /**
+     * Adds a member to the members Map, with its UUID as the key
+     *
+     * @param member a non null {@link Member}
+     * @return the member being added
+     */
     public Member addMember(Member member) {
         if (member == null) {
             throw new IllegalArgumentException("Member cannot be null");
         }
         members.put(member.getId(), member);
         return member;
+    }
+
+    /**
+     * Removes a member from the members Map.
+     *
+     * @param memberId the ID of the member to remove
+     */
+    public void removeMember(UUID memberId) {
+        // Retrieves the member from members Map by their ID
+        Member member = members.get(memberId);
+
+        if (member.hasOverdueLoans()) {
+            throw new IllegalArgumentException("Cannot remove: member has overdue loans");
+        }
+        members.remove(memberId);
     }
 
     // ---------------------------------------- Loans ----------------------------------------
@@ -134,39 +155,72 @@ public class Library {
         return loan;
     }
 
-    public Loan returnItem(UUID mediaId) {
+    /**
+     * Return an item and close a loan for member.
+     *
+     * @param mediaId the ID of the item being returned
+     */
+    public void returnItem(UUID mediaId) {
         MediaItem item = items.get(mediaId);
-        Loan loan = findOpenLoadByMediaId(mediaId);
+        Loan loan = findOpenLoanByMediaId(mediaId);
 
+        // Get current date and calculate any fine accrued
+        LocalDate returnDate = LocalDate.now();
+        int fine = finePolicy.calculateFine(loan.getDueDate(), returnDate);
 
+        // Record fine
+        loan.setFineAccrued(fine);
 
+        // Change loan status to RETURNED and record return date
+        loan.markReturned(returnDate);
+
+        // Update item status to RESERVED if it has a reservation; else AVAILABLE
+        if (hasActiveReservation(mediaId)) {
+            item.setStatus(AvailabilityStatus.RESERVED);
+        } else {
+            item.setStatus(AvailabilityStatus.AVAILABLE);
+        }
+    }
+
+    // ---------------------------------------- Reservations ----------------------------------
+
+    public Reservation placeReservation(UUID memberId, UUID mediaId) {
+        Member member = members.get(memberId);
+        MediaItem item = items.get(mediaId);
+
+        if  (!member.isActiveMember()) {
+            throw new IllegalArgumentException("Inactive members cannot reserve items.");
+        }
+
+        Reservation r = new Reservation(memberId, mediaId, LocalDate.now());
+        reservationsByMediaItem.
 
     }
 
-
-
-    // ---------------------------------------- Helpers ----------------------------------------
+    // ---------------------------------------- Helpers ---------------------------------------
 
     public boolean hasActiveReservation(UUID mediaId) {
-        Deque<Reservation> q = reservations.get(mediaId);
-        if (q == null) {
-            return false;
-        }
-        for  (Reservation reservation : q) {
-            if (reservation.getStatus() == ReservationStatus.ACTIVE) {
-                return true;
+        MediaItem item = items.get(mediaId);
+
+        Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
+        if (reservations != null && !reservations.isEmpty()) {
+            Reservation nextReservation = reservations.pop(); // gets the next reservation from the queue
+            if (nextReservation.getStatus() == ReservationStatus.ACTIVE) {
+                item.setStatus(AvailabilityStatus.RESERVED);
+            } else {
+                item.setStatus(AvailabilityStatus.AVAILABLE);
             }
-        }
-        return false;
+        } else {
+            item.setStatus(AvailabilityStatus.AVAILABLE);
     }
 
-    public Loan findOpenLoadByMediaId(UUID mediaId) {
+    public Loan findOpenLoanByMediaId(UUID mediaId) {
         for (Loan loan : loans.values()) {
             if (loan.getMediaId().equals(mediaId) && loan.getStatus() == LoanStatus.OUTSTANDING) {
                 return loan;
             }
         }
-        throw new NoSuchElementException("Cannot find open load for loan with id " + mediaId);
+        throw new NoSuchElementException("Cannot find open loan for loan with id " + mediaId);
     }
 
 }
