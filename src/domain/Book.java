@@ -21,7 +21,7 @@ public class Book extends MediaItem {
     private int yearOfPublish;
 
     /** Category labels (e.g. 'Fiction', 'History'). */
-    private List<String> categories = new ArrayList<>();
+    private final List<String> categories = new ArrayList<>();
 
     /**
      * Constructs a Book with full metadata.

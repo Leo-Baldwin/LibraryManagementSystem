@@ -171,8 +171,9 @@ public class Library {
      * Return an item and close a loan for member.
      *
      * @param mediaId the ID of the item being returned
+     * @return the returned {@link Loan}
      */
-    public void returnItem(UUID mediaId) {
+    public Loan returnItem(UUID mediaId) {
         MediaItem item = items.get(mediaId);
         Loan loan = findOpenLoanByMediaId(mediaId);
 
@@ -192,6 +193,7 @@ public class Library {
         } else {
             item.setStatus(AvailabilityStatus.AVAILABLE);
         }
+        return loan;
     }
 
     // ---------------------------------------- Reservations ----------------------------------
