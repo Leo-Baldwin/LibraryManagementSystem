@@ -1,5 +1,6 @@
 package domain;
 
+import common.ValidationException;
 import policy.FinePolicy;
 import policy.LoanPolicy;
 
@@ -55,7 +56,7 @@ public class Library {
      */
     public Library(LoanPolicy loanPolicy, FinePolicy finePolicy) {
         if (loanPolicy == null || finePolicy == null) {
-            throw new IllegalArgumentException("Policies cannot be null");
+            throw new ValidationException("Policies cannot be null");
         }
         this.loanPolicy = loanPolicy;
         this.finePolicy = finePolicy;
@@ -70,7 +71,7 @@ public class Library {
      */
     public void addItem(MediaItem item) {
         if (item == null) {
-            throw new IllegalArgumentException("Item cannot be null");
+            throw new ValidationException("Item cannot be null");
         }
         items.put(item.getMediaId(), item);
     }
@@ -85,9 +86,9 @@ public class Library {
         MediaItem item = items.get(mediaId);
         // Checks if item is currently on loan or reserved
         if (!item.isAvailable()) {
-            throw new IllegalArgumentException("Cannot remove: item is not available");
+            throw new ValidationException("Cannot remove: item is not available");
         } else if (hasActiveReservation(mediaId)) {
-            throw new IllegalArgumentException("Cannot remove: item has active reservation");
+            throw new ValidationException("Cannot remove: item has active reservation");
         }
         items.remove(mediaId);
     }
@@ -105,7 +106,7 @@ public class Library {
      */
     public void addMember(Member member) {
         if (member == null) {
-            throw new IllegalArgumentException("Member cannot be null");
+            throw new ValidationException("Member cannot be null");
         }
         members.put(member.getId(), member);
     }
@@ -120,7 +121,7 @@ public class Library {
         Member member = members.get(memberId);
 
         if (member.hasOverdueLoans()) {
-            throw new IllegalArgumentException("Cannot remove: member has overdue loans");
+            throw new ValidationException("Cannot remove: member has overdue loans");
         }
         members.remove(memberId);
     }
@@ -147,11 +148,11 @@ public class Library {
         MediaItem item = items.get(mediaId);
 
         if (!member.isActiveMember()) {
-            throw new IllegalStateException("Cannot loan item while inactive member");
+            throw new ValidationException("Cannot loan item while inactive member");
         } else if (member.hasOverdueLoans()) {
-            throw new IllegalArgumentException("Cannot loan item with overdue loans");
+            throw new ValidationException("Cannot loan item with overdue loans");
         } else if (!item.isAvailable()) {
-            throw new IllegalArgumentException("Item is not currently available");
+            throw new ValidationException("Item is not currently available");
         }
 
         LocalDate loanDate = LocalDate.now();
@@ -201,8 +202,12 @@ public class Library {
     public Reservation placeReservation(UUID memberId, UUID mediaId) {
         Member member = members.get(memberId);
 
+        if (member == null) {
+            throw new ValidationException("Member not found.");
+        }
+
         if (!member.isActiveMember()) {
-            throw new IllegalArgumentException("Inactive members cannot reserve items.");
+            throw new ValidationException("Inactive members cannot reserve items.");
         }
 
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
@@ -211,30 +216,25 @@ public class Library {
         return r;
     }
 
-    public void fulfillReservation(UUID mediaId) {
+    public boolean fulfillReservation(UUID mediaId) {
         MediaItem item = items.get(mediaId);
+        if (item == null) throw new ValidationException("Item not found.");
 
         if(fulfillNextReservation(mediaId)) {
             item.setStatus(AvailabilityStatus.RESERVED);
+            return true;
         }
+        return false;
     }
 
 
     // ---------------------------------------- Helpers ---------------------------------------
 
     public boolean hasActiveReservation(UUID mediaId) {
-        MediaItem item = items.get(mediaId);
-
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
-        if (reservations != null && !reservations.isEmpty()) {
-            Reservation nextReservation = reservations.pop(); // gets the next reservation from the queue
-            if (nextReservation.getStatus() == ReservationStatus.ACTIVE) {
-                item.setStatus(AvailabilityStatus.RESERVED);
-            } else {
-                item.setStatus(AvailabilityStatus.AVAILABLE);
-            }
-        } else {
-            item.setStatus(AvailabilityStatus.AVAILABLE);
+        if (reservations == null && reservations.isEmpty()) return false;
+        for (Reservation reservation : reservations) {
+            if (reservation.getStatus() == ReservationStatus.ACTIVE) return true;
         }
         return false;
     }
@@ -245,7 +245,7 @@ public class Library {
                 return loan;
             }
         }
-        throw new NoSuchElementException("Cannot find open loan for loan with id " + mediaId);
+        throw new ValidationException("No open loan found for mediaId: " + mediaId);
     }
 
     public boolean fulfillNextReservation(UUID mediaId) {
