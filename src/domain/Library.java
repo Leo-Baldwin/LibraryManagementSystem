@@ -147,6 +147,7 @@ public class Library {
         Member member = members.get(memberId);
         MediaItem item = items.get(mediaId);
 
+        // Checks for invariant complicity
         if (!member.isActiveMember()) {
             throw new ValidationException("Cannot loan item while inactive member");
         } else if (member.hasOverdueLoans()) {
@@ -155,14 +156,15 @@ public class Library {
             throw new ValidationException("Item is not currently available");
         }
 
+        // Gets current date and calculates the loans due date
         LocalDate loanDate = LocalDate.now();
         LocalDate dueDate = loanPolicy.calculateDueDate(loanDate);
 
-        // Create new loan object and add to loans Map
+        // Creates new loan object and add to loans Map
         Loan loan = new Loan(member.getId(), item.getMediaId(), loanDate, dueDate);
         loans.put(loan.getLoanId(), loan);
 
-        // Change item state
+        // Changes item state
         item.setStatus(AvailabilityStatus.ON_LOAN);
 
         return loan;
@@ -178,17 +180,17 @@ public class Library {
         MediaItem item = items.get(mediaId);
         Loan loan = findOpenLoanByMediaId(mediaId);
 
-        // Get current date and calculate any fine accrued
+        // Gets current date and calculate any fine accrued
         LocalDate returnDate = LocalDate.now();
         int fine = finePolicy.calculateFine(loan.getDueDate(), returnDate);
 
-        // Record fine
+        // Records fine amount
         loan.setFineAccrued(fine);
 
-        // Change loan status to RETURNED and record return date
+        // Changes loan status to RETURNED and record return date
         loan.markReturned(returnDate);
 
-        // Update item status to RESERVED if it has a reservation; else AVAILABLE
+        // Updates item status to RESERVED if it has a reservation; else AVAILABLE
         if (hasActiveReservation(mediaId)) {
             item.setStatus(AvailabilityStatus.RESERVED);
         } else {
@@ -210,6 +212,7 @@ public class Library {
             throw new ValidationException("Inactive members cannot reserve items.");
         }
 
+        // Gets queue of reservations for given mediaId
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
         Reservation r = new Reservation(memberId, mediaId, LocalDate.now());
         reservations.addLast(r);

@@ -47,7 +47,7 @@ public class Loan {
      * @param dueDate the date the item is due to be returned
      */
     public Loan(UUID memberId, UUID mediaId, LocalDate loanDate, LocalDate dueDate) {
-        this.loanId = UUID.randomUUID(); // Generate a random UUID number
+        this.loanId = UUID.randomUUID(); // Generates a random UUID number
         this.memberId = memberId;
         this.mediaId = mediaId;
         this.loanDate = loanDate;

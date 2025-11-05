@@ -1,5 +1,7 @@
 package domain;
 
+import common.ValidationException;
+
 import java.util.UUID;
 
 /**
@@ -30,7 +32,7 @@ public abstract class Person {
     protected Person(String name, String email) {
         this.id = UUID.randomUUID(); // Generates a random unique identifier number
         this.name = name;
-        setEmail(email); // validation handled in setter
+        setEmail(email); // Validation handled in setter
     }
 
     /** @return the UUID representing this person */
@@ -64,7 +66,7 @@ public abstract class Person {
      */
     public void setEmail(String email) {
         if (email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Invalid email address");
+            throw new ValidationException("Invalid email address");
         }
         this.email = email;
     }

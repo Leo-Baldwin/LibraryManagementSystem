@@ -3,8 +3,6 @@ import policy.*;
 import ui.ConsoleMenu;
 
 import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
 
 public class App {
 
@@ -19,7 +17,7 @@ public class App {
         FinePolicy finePolicy = new StandardFinePolicy(50);     // 50 pence per day fine
         Library library = new Library(loanPolicy, finePolicy);
 
-        // Add demo data
+        // Adds demo data
         Member philip = new Member("Philip Johnson", "Philip@example.com ");
         Member kyle = new Member("Kyle Smith", "Kyle@example.com");
         library.addMember(philip);
@@ -35,7 +33,7 @@ public class App {
         library.addItem(dvd1);
         library.addItem(magazine1);
 
-        // Start the console UI
+        // Starts the console UI
         new ConsoleMenu(library).run();
     }
 }
