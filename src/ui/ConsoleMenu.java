@@ -1,6 +1,7 @@
 package ui;
 
 import domain.*;
+import common.ValidationException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class ConsoleMenu {
                     default:
                         System.out.println("Invalid choice");
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ValidationException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
