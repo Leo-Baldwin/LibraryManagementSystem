@@ -17,22 +17,34 @@ import java.util.*;
  */
 public class Library {
 
-    /** All media items by ID. */
+    /**
+     * All media items by ID.
+     */
     private final Map<UUID, MediaItem> items = new HashMap<>();
 
-    /** All loans by ID. */
+    /**
+     * All loans by ID.
+     */
     private final Map<UUID, Loan> loans = new HashMap<>();
 
-    /** All members by ID. */
+    /**
+     * All members by ID.
+     */
     private final Map<UUID, Member> members = new HashMap<>();
 
-    /** All reservations by ID. */
+    /**
+     * All reservations by ID.
+     */
     private final Map<UUID, Deque<Reservation>> reservationsByMediaItem = new HashMap<>();
 
-    /** Policy for calculating due dates. */
+    /**
+     * Policy for calculating due dates.
+     */
     private final LoanPolicy loanPolicy;
 
-    /** Policy for calculating fines. */
+    /**
+     * Policy for calculating fines.
+     */
     private final FinePolicy finePolicy;
 
     /**
@@ -42,7 +54,7 @@ public class Library {
      * @param finePolicy policy for calculating fines; must not be null
      */
     public Library(LoanPolicy loanPolicy, FinePolicy finePolicy) {
-        if (loanPolicy == null ||  finePolicy == null) {
+        if (loanPolicy == null || finePolicy == null) {
             throw new IllegalArgumentException("Policies cannot be null");
         }
         this.loanPolicy = loanPolicy;
@@ -118,7 +130,7 @@ public class Library {
     /**
      * Create a new loan on an available item for member.
      * <p>
-     *     Invariants:
+     * Invariants:
      *     <ul>
      *         <li>Member must be active.</li>
      *         <li>Member must not have overdue loans.</li>
@@ -127,7 +139,7 @@ public class Library {
      * </p>
      *
      * @param memberId the ID of the member borrowing item
-     * @param mediaId the ID of the item being borrowed
+     * @param mediaId  the ID of the item being borrowed
      * @return the created {@link Loan}
      */
     public Loan loanItem(UUID memberId, UUID mediaId) {
@@ -186,16 +198,25 @@ public class Library {
 
     public Reservation placeReservation(UUID memberId, UUID mediaId) {
         Member member = members.get(memberId);
-        MediaItem item = items.get(mediaId);
 
-        if  (!member.isActiveMember()) {
+        if (!member.isActiveMember()) {
             throw new IllegalArgumentException("Inactive members cannot reserve items.");
         }
 
+        Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
         Reservation r = new Reservation(memberId, mediaId, LocalDate.now());
-        reservationsByMediaItem.
-
+        reservations.addLast(r);
+        return r;
     }
+
+    public void fulfillReservation(UUID mediaId) {
+        MediaItem item = items.get(mediaId);
+
+        if(fulfillNextReservation(mediaId)) {
+            item.setStatus(AvailabilityStatus.RESERVED);
+        }
+    }
+
 
     // ---------------------------------------- Helpers ---------------------------------------
 
@@ -212,6 +233,7 @@ public class Library {
             }
         } else {
             item.setStatus(AvailabilityStatus.AVAILABLE);
+        }
     }
 
     public Loan findOpenLoanByMediaId(UUID mediaId) {
@@ -223,4 +245,17 @@ public class Library {
         throw new NoSuchElementException("Cannot find open loan for loan with id " + mediaId);
     }
 
+    public boolean fulfillNextReservation(UUID mediaId) {
+        Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
+
+        if (reservations == null) return false;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getStatus() == ReservationStatus.ACTIVE) {
+                reservation.fulfil();
+                return true;
+            }
+        }
+        return false;
+    }
 }
