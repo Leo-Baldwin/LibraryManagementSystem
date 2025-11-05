@@ -201,6 +201,13 @@ public class Library {
 
     // ---------------------------------------- Reservations ----------------------------------
 
+    /**
+     * Creates a reservation on a media item for member.
+     *
+     * @param memberId the ID of the member placing reservation
+     * @param mediaId the ID of the item being reserved
+     * @return the successfully placed {@link Reservation}
+     */
     public Reservation placeReservation(UUID memberId, UUID mediaId) {
         Member member = members.get(memberId);
 
@@ -219,6 +226,7 @@ public class Library {
         return r;
     }
 
+
     public boolean fulfillReservation(UUID mediaId) {
         MediaItem item = items.get(mediaId);
         if (item == null) throw new ValidationException("Item not found.");
@@ -233,6 +241,12 @@ public class Library {
 
     // ---------------------------------------- Helpers ---------------------------------------
 
+    /**
+     * Checks if an active reservation currently exists on a given media item.
+     *
+     * @param mediaId the ID of the item being checked for an active reservation
+     * @return {@code true} if an active reservation exists, {@code false} if no active reservation
+     */
     public boolean hasActiveReservation(UUID mediaId) {
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
         if (reservations == null && reservations.isEmpty()) return false;
@@ -242,6 +256,12 @@ public class Library {
         return false;
     }
 
+    /**
+     * Looks for and returns any outstanding loans for a given media item.
+     *
+     * @param mediaId the ID of the item being checked for outstanding loans
+     * @return the outstanding loan if it exists, else returns a ValidationException message
+     */
     public Loan findOpenLoanByMediaId(UUID mediaId) {
         for (Loan loan : loans.values()) {
             if (loan.getMediaId().equals(mediaId) && loan.getStatus() == LoanStatus.OUTSTANDING) {
@@ -251,6 +271,12 @@ public class Library {
         throw new ValidationException("No open loan found for mediaId: " + mediaId);
     }
 
+    /**
+     * Finds and fulfills the next reservation on a media item.
+     *
+     * @param mediaId the ID of the item being checked for the next active reservation
+     * @return {@code true} if active reservation was found and fulfilled, else returns {@code false}
+     */
     public boolean fulfillNextReservation(UUID mediaId) {
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
 

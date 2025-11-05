@@ -19,7 +19,7 @@ public class ConsoleMenu {
     public void run() {
         boolean running = true;
         while (running) {
-            System.out.println("\n---Library System---\n");
+            System.out.println("---Library System---\n");
             System.out.println("Welcome to the Library Management System.\nPlease select an option from" +
                     " the menu below.\n");
             System.out.println("1. List all media");
