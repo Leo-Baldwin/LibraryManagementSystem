@@ -21,7 +21,7 @@ public class Magazine extends MediaItem {
     private int yearOfPublish;
 
     /** Category labels (e.g. 'Technology', 'Fashion'). */
-    private List<String> categories =  new ArrayList<>();
+    private final List<String> categories =  new ArrayList<>();
 
     /**
      * Constructs a Magazine with full metadata.

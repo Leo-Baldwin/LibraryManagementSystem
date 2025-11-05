@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class Dvd extends MediaItem {
     private String ageRating;
 
     /** Category labels (e.g. 'Horror', 'Comedy'). */
-    private List<String> categories;
+    private final List<String> categories;
 
     /**
      * Constructs a Dvd with full metadata.
@@ -41,7 +42,7 @@ public class Dvd extends MediaItem {
         setYearOfRelease(yearOfRelease);
         setDurationMinutes(durationMinutes);
         setAgeRating(ageRating);
-        if  (categories != null) this.categories.addAll(categories);
+        this.categories = new ArrayList<>(categories);
     }
 
     /** @return the Dvd's title */

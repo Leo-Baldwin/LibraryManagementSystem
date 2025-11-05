@@ -134,7 +134,7 @@ public class Loan {
         return returnDate;
     }
 
-    /** @return the current status of the loan, OUSTANDING or RETURNED */
+    /** @return the current status of the loan, OUTSTANDING or RETURNED */
     public LoanStatus getStatus() {
         return status;
     }

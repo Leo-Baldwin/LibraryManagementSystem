@@ -67,14 +67,12 @@ public class Library {
      * Adds a media item to the items Map, with its UUID as the key.
      *
      * @param item a non null {@link MediaItem}
-     * @return the item being added
      */
-    public MediaItem addItem(MediaItem item) {
+    public void addItem(MediaItem item) {
         if (item == null) {
             throw new IllegalArgumentException("Item cannot be null");
         }
         items.put(item.getMediaId(), item);
-        return item;
     }
 
     /**
@@ -88,10 +86,14 @@ public class Library {
         // Checks if item is currently on loan or reserved
         if (!item.isAvailable()) {
             throw new IllegalArgumentException("Cannot remove: item is not available");
-        } else if (hasActiveReservation()) {
+        } else if (hasActiveReservation(mediaId)) {
             throw new IllegalArgumentException("Cannot remove: item has active reservation");
         }
         items.remove(mediaId);
+    }
+
+    public List<MediaItem> listItems() {
+        return new ArrayList<>(items.values());
     }
 
     // ---------------------------------------- Members --------------------------------------
@@ -100,14 +102,12 @@ public class Library {
      * Adds a member to the members Map, with its UUID as the key
      *
      * @param member a non null {@link Member}
-     * @return the member being added
      */
-    public Member addMember(Member member) {
+    public void addMember(Member member) {
         if (member == null) {
             throw new IllegalArgumentException("Member cannot be null");
         }
         members.put(member.getId(), member);
-        return member;
     }
 
     /**
@@ -236,6 +236,7 @@ public class Library {
         } else {
             item.setStatus(AvailabilityStatus.AVAILABLE);
         }
+        return false;
     }
 
     public Loan findOpenLoanByMediaId(UUID mediaId) {
