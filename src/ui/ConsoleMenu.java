@@ -132,7 +132,7 @@ public class ConsoleMenu {
 
     private UUID readUUIDOrCancel(String prompt) {
         while (true) {
-            System.out.println(prompt);
+            System.out.println(prompt + " (Press Enter to cancel): ");
             String input = scanner.nextLine().trim();
 
             if (isCancelled(input)) {
