@@ -13,14 +13,4 @@ public class ValidationException extends RuntimeException {
     public ValidationException(String message){
         super(message);
     }
-
-    /**
-     * Constructs a new ValidationException with a specified message and cause.
-     *
-     * @param message the message explanation of what validation failed
-     * @param cause the cause of the rule or constraint violation
-     */
-    public ValidationException(String message, Throwable cause){
-        super(message, cause);
-    }
 }

@@ -84,17 +84,13 @@ public class Library {
     public void removeItem(UUID mediaId) {
         // Retrieves the item from items Map by its ID
         MediaItem item = items.get(mediaId);
-        // Checks if item is currently on loan or reserved
+
         if (!item.isAvailable()) {
             throw new ValidationException("Cannot remove: item is not available");
         } else if (hasActiveReservation(mediaId)) {
             throw new ValidationException("Cannot remove: item has active reservation");
         }
         items.remove(mediaId);
-    }
-
-    public List<MediaItem> listItems() {
-        return new ArrayList<>(items.values());
     }
 
     // ---------------------------------------- Members --------------------------------------
@@ -199,7 +195,7 @@ public class Library {
         return loan;
     }
 
-    // ---------------------------------------- Reservations ----------------------------------
+    // ---------------------------------------- Reservations ---------------------------------
 
     /**
      * Creates a reservation on a media item for member.
@@ -220,7 +216,8 @@ public class Library {
         }
 
         // Gets queue of reservations for given mediaId
-        Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
+        Deque<Reservation> reservations = reservationsByMediaItem.computeIfAbsent(mediaId,
+                id -> new ArrayDeque<>());
         Reservation r = new Reservation(memberId, mediaId, LocalDate.now());
         reservations.addLast(r);
         return r;
@@ -238,8 +235,58 @@ public class Library {
         return false;
     }
 
+    // ---------------------------------------- Lookups and Listings -------------------------
 
-    // ---------------------------------------- Internals ---------------------------------------
+    public List<MediaItem> listItems() {
+        return new ArrayList<>(items.values());
+    }
+
+    public List<Member> listMembers() {
+        return new ArrayList<>(members.values());
+    }
+
+    public List<MediaItem> searchMedia(String keyword) {
+        if (keyword == null) keyword = "";
+        String q = keyword.toLowerCase();
+        List<MediaItem> results = new ArrayList<>();
+        for (MediaItem item : items.values()) {
+            String title = item.getTitle() == null ? "" : item.getTitle().toLowerCase();
+
+            String author = "";
+            if (item instanceof Book book) {
+                author = (book.getAuthor() == null) ? "" : book.getAuthor().toLowerCase();
+            }
+
+            if (title.contains(q) || author.contains(q)) {
+                results.add(item);
+            }
+        }
+        results.sort(Comparator.comparing(
+                m -> m.getTitle() == null ? "" : m.getTitle(),
+                String.CASE_INSENSITIVE_ORDER
+        ));
+        return results;
+    }
+
+    public List<Member> searchMembers(String keyword) {
+        if (keyword == null) keyword = "";
+        String q = keyword.toLowerCase();
+        List<Member> results = new ArrayList<>();
+        for (Member member : members.values()) {
+            String name = member.getName() == null ? "" : member.getName().toLowerCase();
+
+            if (name.contains(q)) {
+                results.add(member);
+            }
+        }
+        results.sort(Comparator.comparing(
+                m -> m.getName() == null ? "" : m.getName(),
+                String.CASE_INSENSITIVE_ORDER)
+        );
+        return results;
+    }
+
+    // ---------------------------------------- Internals ------------------------------------
 
     /**
      * Checks if an active reservation currently exists on a given media item.
@@ -249,7 +296,7 @@ public class Library {
      */
     private boolean hasActiveReservation(UUID mediaId) {
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
-        if (reservations == null && reservations.isEmpty()) return false;
+        if (reservations == null || reservations.isEmpty()) return false;
         for (Reservation reservation : reservations) {
             if (reservation.getStatus() == ReservationStatus.ACTIVE) return true;
         }

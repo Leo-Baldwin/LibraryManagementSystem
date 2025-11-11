@@ -6,6 +6,7 @@ import common.ValidationException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class ConsoleMenu {
 
@@ -21,8 +22,11 @@ public class ConsoleMenu {
         while (running) {
             System.out.println();
             System.out.println("---Library System---\n");
-            System.out.println("Welcome to the Library Management System.\nPlease select an option from" +
-                    " the menu below.\n");
+            System.out.println("""
+                    Welcome to the Library Management System.
+                    Please select an option from\
+                     the menu below.
+                    """);
             System.out.println("1. List all media");
             System.out.println("2. Checkout item");
             System.out.println("3. Return item");
@@ -76,12 +80,46 @@ public class ConsoleMenu {
     }
 
     public void loanItem(Library library) {
-        UUID memberId = readUUID("Enter Member ID: ");
-        UUID mediaId = readUUID("Enter Media ID: ");
+        try {
+            String mq  = readLine("Search for member by name");
+            Member member = selectFromList(
+                    library.searchMembers(mq),
+                    "Results",
+                    this::fmtMember
+            );
 
-        Loan loan = library.loanItem(memberId, mediaId);
-        System.out.println("Checked out successfully. Due: " + loan.getDueDate());
-        System.out.println();
+            String iq  = readLine("Search for item by title/author");
+            MediaItem item = selectFromList(
+                    library.searchMedia(iq),
+                    "Results",
+                    this::fmtMedia
+            );
+
+            boolean cfm = confirm("You are about to create a loan:", List.of(
+                    "Member: " + fmtMember(member),
+                    "Item: " + fmtMedia(item)
+            ));
+
+            if (!cfm) {
+                System.out.println("Cancelled. Returning to menu...\n");
+                return;
+            }
+
+            Loan loan = library.loanItem(member.getId(), item.getMediaId());
+            System.out.println("Loan created successfully.");
+            System.out.println("Receipt:");
+            System.out.println("  Member: " + member.getName());
+            System.out.println("  Item:   " + item.getTitle());
+            System.out.println("  Due:    " + loan.getDueDate());
+            System.out.println();
+
+        } catch (CancelledOperationException ignored) {
+            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println();
+        } catch (ValidationException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println();
+        }
     }
 
     public void returnItem(Library library) {
@@ -129,12 +167,9 @@ public class ConsoleMenu {
 
     private UUID readUUID(String prompt) {
         while (true) {
-            System.out.println(prompt + " (Press Enter to cancel): ");
+            System.out.print(prompt + " (Press Enter to cancel): ");
             String input = scanner.nextLine().trim();
-
-            if (isCancelled(input)) {
-                throw new CancelledOperationException();
-            }
+            if (isCancelled(input)) throw new CancelledOperationException();
 
             try {
                 return UUID.fromString(input);
@@ -146,13 +181,71 @@ public class ConsoleMenu {
     }
 
     private String readLine(String prompt) {
-        System.out.println(prompt + " (Press Enter to cancel): ");
+        System.out.print(prompt + " (Press Enter to cancel): ");
         String input = scanner.nextLine().trim();
 
         if (isCancelled(input)) {
             throw new CancelledOperationException();
         }
-
         return input;
+    }
+
+    private <T> T selectFromList(
+            List<T> options,
+            String heading,
+            Function<T, String> displayFormatter
+    ) {
+        if (options == null || options.isEmpty()) {
+            System.out.println("No results.\n");
+            throw new CancelledOperationException();
+        }
+
+        System.out.println("----------------------------------------");
+        System.out.println(heading);
+        for (int i = 0; i < options.size(); i++) {
+            System.out.printf("%d) %s%n", i + 1, displayFormatter.apply(options.get(i)));
+        }
+        System.out.println("0) Cancel");
+        System.out.println("----------------------------------------");
+
+        while (true) {
+            String input = readLine("Select a number");
+            if(input.equals("0")) throw new CancelledOperationException();
+            try {
+                int index = Integer.parseInt(input);
+                if (index >= 1 && index <= options.size()) return options.get(index - 1);
+            } catch (NumberFormatException ignored) {
+                System.out.println("Error: Please enter a valid number from the list.\n");
+            }
+        }
+    }
+
+    private boolean confirm(String title, List<String> lines) {
+        System.out.println("----------------------------------------");
+        System.out.println(title);
+        for (String line : lines) System.out.println("  " + line);
+        System.out.println("----------------------------------------");
+        String answer = readLine("Confirm? (Y/n)").toLowerCase();
+        return answer.equals("y") || answer.equals("yes") || answer.isBlank();
+    }
+
+    private static String shortId(UUID id) {
+        String s = id.toString();
+        return s.substring(0, 8);
+    }
+
+    private String fmtMedia(MediaItem m) {
+        String title = (m.getTitle() == null || m.getTitle().isBlank()) ? "(untitled)" : m.getTitle();
+        String author = (m instanceof Book b && b.getAuthor() != null && !b.getAuthor().isBlank())
+                ? " — " + b.getAuthor()
+                : "";
+        String status = (m.getStatus() == null) ? "" : " [" + m.getStatus() + "]";
+        return title + author + " (id:" + shortId(m.getMediaId()) + ")" + status;
+    }
+
+    private String fmtMember(Member member) {
+        String name = member.getName() == null ? "(unnamed)" : member.getName();
+        String email = member.getEmail() == null || member.getEmail().isBlank() ? "" : " <" + member.getEmail() + ">";
+        return name + email + " (id:" + shortId(member.getId()) + ")";
     }
 }

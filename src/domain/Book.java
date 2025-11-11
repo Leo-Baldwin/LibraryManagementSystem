@@ -88,6 +88,7 @@ public class Book extends MediaItem {
         if  (categories == null || categories.isEmpty()) {
             throw new IllegalArgumentException("Categories cannot be null or empty");
         }
+        this.categories.clear();
         this.categories.addAll(categories);
     }
 

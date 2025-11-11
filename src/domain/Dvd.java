@@ -25,7 +25,7 @@ public class Dvd extends MediaItem {
     private String ageRating;
 
     /** Category labels (e.g. 'Horror', 'Comedy'). */
-    private final List<String> categories;
+    private final List<String> categories =  new ArrayList<>();
 
     /**
      * Constructs a Dvd with full metadata.
@@ -42,7 +42,7 @@ public class Dvd extends MediaItem {
         setYearOfRelease(yearOfRelease);
         setDurationMinutes(durationMinutes);
         setAgeRating(ageRating);
-        this.categories = new ArrayList<>(categories);
+        setCategories(categories);
     }
 
     /** @return the Dvd's title */
@@ -107,6 +107,7 @@ public class Dvd extends MediaItem {
         if  (categories == null || categories.isEmpty()) {
             throw new IllegalArgumentException("Categories cannot be null or empty");
         }
+        this.categories.clear();
         this.categories.addAll(categories);
     }
 

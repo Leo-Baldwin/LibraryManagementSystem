@@ -88,6 +88,7 @@ public class Magazine extends MediaItem {
         if  (categories == null || categories.isEmpty()) {
             throw new IllegalArgumentException("Categories cannot be null or empty");
         }
+        this.categories.clear();
         this.categories.addAll(categories);
     }
 
@@ -101,5 +102,4 @@ public class Magazine extends MediaItem {
                 "Categories: " + getCategories() + "\n" +
                 "Status: " + getStatus();
     }
-
 }

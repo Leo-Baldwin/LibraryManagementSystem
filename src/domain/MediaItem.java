@@ -35,6 +35,9 @@ public abstract class MediaItem {
         return status;
     }
 
+    /** @return the books title */
+    public abstract String getTitle();
+
     /**
      * Sets a new availability status for the media item.
      *
