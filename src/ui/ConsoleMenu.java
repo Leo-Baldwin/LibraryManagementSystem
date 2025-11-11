@@ -19,6 +19,7 @@ public class ConsoleMenu {
     public void run() {
         boolean running = true;
         while (running) {
+            System.out.println();
             System.out.println("---Library System---\n");
             System.out.println("Welcome to the Library Management System.\nPlease select an option from" +
                     " the menu below.\n");
@@ -57,6 +58,8 @@ public class ConsoleMenu {
                 }
             } catch (ValidationException e) {
                 System.out.println("Error: " + e.getMessage());
+            } catch (CancelledOperationException e) {
+                System.out.println("Cancelled. Returning to menu...\n");
             }
         }
         System.out.println("\nExiting Library Management System...");
@@ -73,8 +76,8 @@ public class ConsoleMenu {
     }
 
     public void loanItem(Library library) {
-        UUID memberId = readUUID("Enter Member ID: ");
-        UUID mediaId = readUUID("Enter Media ID: ");
+        UUID memberId = readUUIDOrCancel("Enter Member ID: ");
+        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
 
         Loan loan = library.loanItem(memberId, mediaId);
         System.out.println("Checked out successfully. Due: " + loan.getDueDate());
@@ -82,15 +85,15 @@ public class ConsoleMenu {
     }
 
     public void returnItem(Library library) {
-        UUID mediaId = readUUID("Enter Media ID: ");
+        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
         Loan loan = library.returnItem(mediaId);
         System.out.println("Returned successfully. Fine: " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
         System.out.println();
     }
 
     public void placeReservation(Library library) {
-        UUID memberId = readUUID("Enter Member ID: ");
-        UUID mediaId = readUUID("Enter Media ID: ");
+        UUID memberId = readUUIDOrCancel("Enter Member ID: ");
+        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
 
         Reservation reservation = library.placeReservation(memberId, mediaId);
         System.out.println("Reservation placed. Reservation ID: " + reservation.getReservationId());
@@ -120,10 +123,22 @@ public class ConsoleMenu {
 
     // ---------------------------------------- Internals ---------------------------------------
 
-    private UUID readUUID(String prompt) {
+    private boolean isCancelled(String s) {
+        return s.isBlank() || switch  (s.toLowerCase()) {
+            case "cancel", "quit", "q", "exit" -> true;
+            default -> false;
+        };
+    }
+
+    private UUID readUUIDOrCancel(String prompt) {
         while (true) {
             System.out.println(prompt);
             String input = scanner.nextLine().trim();
+
+            if (isCancelled(input)) {
+                throw new CancelledOperationException();
+            }
+
             try {
                 return UUID.fromString(input);
             } catch (IllegalArgumentException e) {
