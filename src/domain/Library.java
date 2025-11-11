@@ -247,7 +247,7 @@ public class Library {
      * @param mediaId the ID of the item being checked for an active reservation
      * @return {@code true} if an active reservation exists, {@code false} if no active reservation
      */
-    public boolean hasActiveReservation(UUID mediaId) {
+    private boolean hasActiveReservation(UUID mediaId) {
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
         if (reservations == null && reservations.isEmpty()) return false;
         for (Reservation reservation : reservations) {
@@ -262,7 +262,7 @@ public class Library {
      * @param mediaId the ID of the item being checked for outstanding loans
      * @return the outstanding loan if it exists, else returns a ValidationException message
      */
-    public Loan findOpenLoanByMediaId(UUID mediaId) {
+    private Loan findOpenLoanByMediaId(UUID mediaId) {
         for (Loan loan : loans.values()) {
             if (loan.getMediaId().equals(mediaId) && loan.getStatus() == LoanStatus.OUTSTANDING) {
                 return loan;
@@ -277,7 +277,7 @@ public class Library {
      * @param mediaId the ID of the item being checked for the next active reservation
      * @return {@code true} if active reservation was found and fulfilled, else returns {@code false}
      */
-    public boolean fulfillNextReservation(UUID mediaId) {
+    private boolean fulfillNextReservation(UUID mediaId) {
         Deque<Reservation> reservations = reservationsByMediaItem.get(mediaId);
 
         if (reservations == null) return false;
