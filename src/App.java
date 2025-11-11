@@ -13,6 +13,7 @@ public class App {
      */
     public static void main(String[] args) {
 
+        // Injects policy interfaces with their configurations and create Library object
         LoanPolicy loanPolicy = new StandardLoanPolicy(14);        // 14 day loan period
         FinePolicy finePolicy = new StandardFinePolicy(50);     // 50 pence per day fine
         Library library = new Library(loanPolicy, finePolicy);

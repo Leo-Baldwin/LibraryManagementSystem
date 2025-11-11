@@ -239,7 +239,7 @@ public class Library {
     }
 
 
-    // ---------------------------------------- Helpers ---------------------------------------
+    // ---------------------------------------- Internals ---------------------------------------
 
     /**
      * Checks if an active reservation currently exists on a given media item.
@@ -272,7 +272,7 @@ public class Library {
     }
 
     /**
-     * Finds and fulfills the next reservation on a media item.
+     * Finds and fulfills the next reservation on a media item if one exists.
      *
      * @param mediaId the ID of the item being checked for the next active reservation
      * @return {@code true} if active reservation was found and fulfilled, else returns {@code false}
