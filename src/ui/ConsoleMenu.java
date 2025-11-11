@@ -76,8 +76,8 @@ public class ConsoleMenu {
     }
 
     public void loanItem(Library library) {
-        UUID memberId = readUUIDOrCancel("Enter Member ID: ");
-        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
+        UUID memberId = readUUID("Enter Member ID: ");
+        UUID mediaId = readUUID("Enter Media ID: ");
 
         Loan loan = library.loanItem(memberId, mediaId);
         System.out.println("Checked out successfully. Due: " + loan.getDueDate());
@@ -85,15 +85,15 @@ public class ConsoleMenu {
     }
 
     public void returnItem(Library library) {
-        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
+        UUID mediaId = readUUID("Enter Media ID: ");
         Loan loan = library.returnItem(mediaId);
         System.out.println("Returned successfully. Fine: " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
         System.out.println();
     }
 
     public void placeReservation(Library library) {
-        UUID memberId = readUUIDOrCancel("Enter Member ID: ");
-        UUID mediaId = readUUIDOrCancel("Enter Media ID: ");
+        UUID memberId = readUUID("Enter Member ID: ");
+        UUID mediaId = readUUID("Enter Media ID: ");
 
         Reservation reservation = library.placeReservation(memberId, mediaId);
         System.out.println("Reservation placed. Reservation ID: " + reservation.getReservationId());
@@ -101,17 +101,13 @@ public class ConsoleMenu {
     }
 
     public void addBook(Library library) {
-        System.out.println("Enter Book Title: ");
-        String title = scanner.nextLine().trim();
-
-        System.out.println("Enter Book Author: ");
-        String author = scanner.nextLine().trim();
+        String title = readLine("Enter Book Title: ");
+        String author = readLine("Enter Book Author: ");
 
         System.out.println("Enter Book Year of Publication: ");
         int yearOfPublication = scanner.nextInt();
 
-        System.out.println("Enter Book Categories (seperated by a comma): ");
-        String categoriesInput = scanner.nextLine().trim();
+        String categoriesInput = readLine("Enter Book Categories (seperated by a comma): ");
         List<String> categories = categoriesInput.isEmpty()
                 ? List.of()
                 : List.of(categoriesInput.split("\\s*,\\s*"));
@@ -119,6 +115,7 @@ public class ConsoleMenu {
         Book book = new Book(title, author, yearOfPublication, categories);
         library.addItem(book);
         System.out.println("Book added successfully. Book ID: " + book.getMediaId());
+        System.out.println();
     }
 
     // ---------------------------------------- Internals ---------------------------------------
@@ -130,7 +127,7 @@ public class ConsoleMenu {
         };
     }
 
-    private UUID readUUIDOrCancel(String prompt) {
+    private UUID readUUID(String prompt) {
         while (true) {
             System.out.println(prompt + " (Press Enter to cancel): ");
             String input = scanner.nextLine().trim();
@@ -146,5 +143,16 @@ public class ConsoleMenu {
                 System.out.println();
             }
         }
+    }
+
+    private String readLine(String prompt) {
+        System.out.println(prompt + " (Press Enter to cancel): ");
+        String input = scanner.nextLine().trim();
+
+        if (isCancelled(input)) {
+            throw new CancelledOperationException();
+        }
+
+        return input;
     }
 }
