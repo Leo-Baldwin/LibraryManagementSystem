@@ -84,7 +84,7 @@ public class ConsoleMenu {
     public void returnItem(Library library) {
         UUID mediaId = readUUID("Enter Media ID: ");
         Loan loan = library.returnItem(mediaId);
-        System.out.println("Returned successfully. Fine: £" + loan.getFineAccrued() / 100);
+        System.out.println("Returned successfully. Fine: " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
         System.out.println();
     }
 
@@ -109,7 +109,9 @@ public class ConsoleMenu {
 
         System.out.println("Enter Book Categories (seperated by a comma): ");
         String categoriesInput = scanner.nextLine().trim();
-        List<String> categories = List.of(categoriesInput.split("\\s*,\\s*"));
+        List<String> categories = categoriesInput.isEmpty()
+                ? List.of()
+                : List.of(categoriesInput.split("\\s*,\\s*"));
 
         Book book = new Book(title, author, yearOfPublication, categories);
         library.addItem(book);
