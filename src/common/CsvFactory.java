@@ -1,4 +1,5 @@
 package common;
 
-public interface CsvFactory {
+public interface CsvFactory<T> {
+    T fromRow(String[] row);
 }

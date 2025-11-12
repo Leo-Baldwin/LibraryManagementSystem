@@ -113,6 +113,8 @@ public class ConsoleMenu {
             System.out.println("  Due:    " + loan.getDueDate());
             System.out.println();
 
+            pause();
+
         } catch (CancelledOperationException ignored) {
             System.out.println("Cancelled. Returning to menu...\n");
             System.out.println();
@@ -146,6 +148,8 @@ public class ConsoleMenu {
             System.out.println("  Item:  " + item.getTitle());
             System.out.println("  Fine:  " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
             System.out.println();
+
+            pause();
 
         } catch (CancelledOperationException ignored) {
             System.out.println("Cancelled. Returning to menu...\n");
@@ -189,6 +193,8 @@ public class ConsoleMenu {
             System.out.println("  ResID:  " + reservation.getReservationId());
             System.out.println();
 
+            pause();
+
         } catch (CancelledOperationException ignored) {
             System.out.println("Cancelled. Returning to menu...\n");
             System.out.println();
@@ -228,6 +234,8 @@ public class ConsoleMenu {
             library.addItem(book);
             System.out.println("Book added. Book ID: " + book.getMediaId());
             System.out.println();
+
+            pause();
 
         } catch (CancelledOperationException ignored) {
             System.out.println("Cancelled. Returning to menu...\n");
@@ -329,5 +337,10 @@ public class ConsoleMenu {
         String name = member.getName() == null ? "(unnamed)" : member.getName();
         String email = member.getEmail() == null || member.getEmail().isBlank() ? "" : " <" + member.getEmail() + ">";
         return name + email + " (id:" + shortId(member.getId()) + ")";
+    }
+
+    private void pause() {
+        System.out.print("Press Enter to continue...");
+        scanner.nextLine();
     }
 }
