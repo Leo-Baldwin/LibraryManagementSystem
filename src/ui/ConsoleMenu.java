@@ -33,7 +33,7 @@ public class ConsoleMenu {
             System.out.println("4. Place reservation");
             System.out.println("5. Add new book");
             System.out.println("6. Exit\n");
-            System.out.println("Enter your choice: ");
+            System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine().trim();
 
@@ -58,7 +58,7 @@ public class ConsoleMenu {
                         running = false;
                         break;
                     default:
-                        System.out.println("Invalid choice");
+                        System.out.println("Invalid choice. Please enter 1-6.");
                 }
             } catch (ValidationException e) {
                 System.out.println("Error: " + e.getMessage());
@@ -75,12 +75,15 @@ public class ConsoleMenu {
 
         for (MediaItem item : library.listItems()) {
             System.out.println(item);
-            System.out.println("\n");
+            System.out.println();
         }
+
+        pause();
     }
 
     public void loanItem(Library library) {
         try {
+            System.out.println();
             String mq  = readLine("Search for member by name");
             Member member = selectFromList(
                     library.searchMembers(mq),
@@ -88,6 +91,7 @@ public class ConsoleMenu {
                     this::fmtMember
             );
 
+            System.out.println();
             String iq  = readLine("Search for item by title/author");
             MediaItem item = selectFromList(
                     library.searchMedia(iq),
@@ -106,7 +110,7 @@ public class ConsoleMenu {
             }
 
             Loan loan = library.loanItem(member.getId(), item.getMediaId());
-            System.out.println("Loan created successfully.");
+            System.out.println("Loan created successfully.\n");
             System.out.println("Receipt:");
             System.out.println("  Member: " + member.getName());
             System.out.println("  Item:   " + item.getTitle());
@@ -295,17 +299,23 @@ public class ConsoleMenu {
         for (int i = 0; i < options.size(); i++) {
             System.out.printf("%d) %s%n", i + 1, displayFormatter.apply(options.get(i)));
         }
-        System.out.println("0) Cancel");
         System.out.println("----------------------------------------");
 
         while (true) {
             String input = readLine("Select a number");
-            if(input.equals("0")) throw new CancelledOperationException();
+            if(input.isBlank()) {
+                throw new CancelledOperationException();
+            }
+
             try {
                 int index = Integer.parseInt(input);
-                if (index >= 1 && index <= options.size()) return options.get(index - 1);
+                if (index >= 1 && index <= options.size()) {
+                    return options.get(index - 1);
+                } else {
+                    System.out.println("Error: Please enter a number from the list.\n");
+                }
             } catch (NumberFormatException ignored) {
-                System.out.println("Error: Please enter a valid number from the list.\n");
+                System.out.println("Error: Please enter a number from the list.\n");
             }
         }
     }
