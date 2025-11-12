@@ -68,9 +68,7 @@ public class Loan {
         if (status == LoanStatus.RETURNED) {
             throw new IllegalStateException("Loan is already returned, cannot be returned twice.");
         }
-        if  (this.returnDate == null) {
-            throw new IllegalArgumentException("Return Date cannot be null.");
-        }
+
         this.returnDate = returnDate;
         // Marks the loan as returned
         this.status = LoanStatus.RETURNED;

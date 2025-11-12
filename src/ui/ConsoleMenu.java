@@ -28,7 +28,7 @@ public class ConsoleMenu {
                      the menu below.
                     """);
             System.out.println("1. List all media");
-            System.out.println("2. Checkout item");
+            System.out.println("2. Loan item");
             System.out.println("3. Return item");
             System.out.println("4. Place reservation");
             System.out.println("5. Add new book");
@@ -123,37 +123,119 @@ public class ConsoleMenu {
     }
 
     public void returnItem(Library library) {
-        UUID mediaId = readUUID("Enter Media ID: ");
-        Loan loan = library.returnItem(mediaId);
-        System.out.println("Returned successfully. Fine: " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
-        System.out.println();
+        try {
+            String q = readLine("Search for item to return (title/author)");
+            MediaItem item = selectFromList(
+                    library.searchMedia(q),
+                    "Matching items",
+                    this::fmtMedia
+            );
+
+            boolean cfm = confirm("Confirm item to return:", List.of(
+                    "Item: " + fmtMedia(item)
+            ));
+
+            if (!cfm) {
+                System.out.println("Cancelled. Returning to menu...\n");
+                return;
+            }
+
+            Loan loan = library.returnItem(item.getMediaId());
+            System.out.println("Loan returned successfully.");
+            System.out.println("Receipt:");
+            System.out.println("  Item:  " + item.getTitle());
+            System.out.println("  Fine:  " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
+            System.out.println();
+
+        } catch (CancelledOperationException ignored) {
+            System.out.println("Cancelled. Returning to menu...\n");
+        } catch (ValidationException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println();
+        }
     }
 
     public void placeReservation(Library library) {
-        UUID memberId = readUUID("Enter Member ID: ");
-        UUID mediaId = readUUID("Enter Media ID: ");
+        try {
+            String mq =  readLine("Search for member by name");
+            Member member = selectFromList(
+                    library.searchMembers(mq),
+                    "Results",
+                    this::fmtMember
+            );
 
-        Reservation reservation = library.placeReservation(memberId, mediaId);
-        System.out.println("Reservation placed. Reservation ID: " + reservation.getReservationId());
-        System.out.println();
+            String iq  = readLine("Search for item by title/author");
+            MediaItem item = selectFromList(
+                    library.searchMedia(iq),
+                    "Results",
+                    this::fmtMedia
+            );
+
+            boolean cfm = confirm("Confirm reservation:", List.of(
+                    "Member: " + fmtMember(member),
+                    "Item: " + fmtMedia(item)
+            ));
+
+            if (!cfm) {
+                System.out.println("Cancelled. Returning to menu...\n");
+                return;
+            }
+
+            Reservation reservation = library.placeReservation(member.getId(), item.getMediaId());
+            System.out.println("Reservation placed.");
+            System.out.println("Receipt:");
+            System.out.println("  Member: " + member.getName());
+            System.out.println("  Item:   " + item.getTitle());
+            System.out.println("  ResID:  " + reservation.getReservationId());
+            System.out.println();
+
+        } catch (CancelledOperationException ignored) {
+            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println();
+        }  catch (ValidationException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println();
+        }
     }
 
     public void addBook(Library library) {
-        String title = readLine("Enter Book Title: ");
-        String author = readLine("Enter Book Author: ");
+        try {
+            String title = readLine("Enter Book Title: ");
+            String author = readLine("Enter Book Author: ");
 
-        System.out.println("Enter Book Year of Publication: ");
-        int yearOfPublication = scanner.nextInt();
+            System.out.println("Enter Book Year of Publication: ");
+            int yearOfPublication = scanner.nextInt();
+            scanner.nextLine();
 
-        String categoriesInput = readLine("Enter Book Categories (seperated by a comma): ");
-        List<String> categories = categoriesInput.isEmpty()
-                ? List.of()
-                : List.of(categoriesInput.split("\\s*,\\s*"));
+            String categoriesInput = readLine("Enter Book Categories (seperated by a comma): ");
+            List<String> categories = categoriesInput.isEmpty()
+                    ? List.of()
+                    : List.of(categoriesInput.split("\\s*,\\s*"));
 
-        Book book = new Book(title, author, yearOfPublication, categories);
-        library.addItem(book);
-        System.out.println("Book added successfully. Book ID: " + book.getMediaId());
-        System.out.println();
+            boolean cfm = confirm("Add book?", List.of(
+                    "Title:       " + title,
+                    "Author:      " + author,
+                    "Year:        " + yearOfPublication,
+                    "Categories:  " + (categories.isEmpty() ? "(none)" : String.join(", ", categories))
+            ));
+
+            if (!cfm) {
+                System.out.println("Cancelled. Returning to menu...\n");
+                return;
+            }
+
+            Book book = new Book(title, author, yearOfPublication, categories);
+            library.addItem(book);
+            System.out.println("Book added. Book ID: " + book.getMediaId());
+            System.out.println();
+
+        } catch (CancelledOperationException ignored) {
+            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println();
+        } catch (ValidationException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println();
+        }
     }
 
     // ---------------------------------------- Internals ---------------------------------------
