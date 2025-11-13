@@ -116,7 +116,7 @@ public class Library {
         // Retrieves the member from members Map by their ID
         Member member = members.get(memberId);
 
-        if (member.hasOverdueLoans()) {
+        if (memberHasOverdueLoans(memberId)) {
             throw new ValidationException("Cannot remove: member has overdue loans");
         }
         members.remove(memberId);
@@ -146,7 +146,7 @@ public class Library {
         // Checks for invariant complicity
         if (!member.isActiveMember()) {
             throw new ValidationException("Cannot loan item while inactive member");
-        } else if (member.hasOverdueLoans()) {
+        } else if (memberHasOverdueLoans(memberId)) {
             throw new ValidationException("Cannot loan item with overdue loans");
         } else if (!item.isAvailable()) {
             throw new ValidationException("Item is not currently available");
@@ -316,6 +316,19 @@ public class Library {
             }
         }
         throw new ValidationException("No open loan found for mediaId: " + mediaId);
+    }
+
+    private boolean memberHasOverdueLoans (UUID memberId) {
+        LocalDate date = LocalDate.now();
+
+        for  (Loan loan : loans.values()) {
+            if (loan.getMemberId().equals(memberId)
+                    && loan.getStatus() == LoanStatus.OUTSTANDING
+                    && loan.getDueDate().isBefore(date)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

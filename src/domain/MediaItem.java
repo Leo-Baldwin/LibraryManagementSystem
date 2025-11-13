@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * Abstract superclass that represents any item that can exist within the Library's
- * collection (e.g., Books, DVD's Magazines).
+ * collection (e.g., Books, DVD's, Magazines).
  * <p>
  *     Encapsulates identity, availability status, and basic behaviours shared by all
  *     media types. Concrete subclasses such as {@link Book}, {@link Dvd}, and {@link Magazine}

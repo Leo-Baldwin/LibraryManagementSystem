@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * Represents a loan record for a single {@link MediaItem} by a {@link Member}.
  * <p>
- *     When an available media item is checked out a laon is created with the
+ *     When an available media item is checked out a loan is created with the
  *     status {@link LoanStatus#OUTSTANDING}. This status remains the same until
  *     the item is returned, upon which the loan transitions to {@link LoanStatus#RETURNED},
  *     and any fine is recorded.

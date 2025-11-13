@@ -291,7 +291,6 @@ public class ConsoleMenu {
     }
 
     private String readLine(String prompt) {
-        System.out.println();
         System.out.print(prompt + " (Press Enter to cancel): ");
         String input = scanner.nextLine().trim();
 
@@ -348,6 +347,7 @@ public class ConsoleMenu {
             System.out.println("  " + line);
         }
         System.out.println("----------------------------------------");
+        System.out.println();
         String answer = readLine("Confirm? (Y/n)").toLowerCase();
         System.out.println();
 

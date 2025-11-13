@@ -46,27 +46,6 @@ public class Member extends Person {
         this.activeMember = activeMember;
     }
 
-    /**
-     * Determines whether the member can borrow items.
-     * <p>
-     *     The member must have an active membership and no overdue loans.
-     * </p>
-     *
-     * @return {@code true} if the member can borrow; otherwise {@code false}
-     */
-    public boolean canBorrow() {
-        return activeMember && !hasOverdueLoans();
-    }
-
-    /**
-     * Determines whether the member has any overdue loans.
-     *
-     * @return {@code true} if the member has overdue loans; otherwise {@code false}
-     */
-    public boolean hasOverdueLoans() {
-        return false; // Placeholder: replace with full functionality once all classes are built
-    }
-
     /** @return formatted string with name, email, and activity status */
     @Override
     public String toString() {
