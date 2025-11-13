@@ -3,7 +3,7 @@ package domain.policy;
 import java.time.LocalDate;
 
 /**
- * Interface class for calculating overdue fines.
+ * Interface for calculating overdue fines.
  */
 public interface FinePolicy {
 

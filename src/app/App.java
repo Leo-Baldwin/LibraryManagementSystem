@@ -5,7 +5,7 @@ import domain.policy.LoanPolicy;
 import domain.policy.StandardFinePolicy;
 import domain.policy.StandardLoanPolicy;
 import domain.service.Library;
-import presentation.console.ConsoleMenu;
+import presentation.ConsoleMenu;
 
 public class App {
 
@@ -16,7 +16,7 @@ public class App {
      */
     public static void main(String[] args) {
 
-        // Injects policy interfaces with their configurations and create Library object
+        // Injects policy interfaces with their configurations and creates Library object
         LoanPolicy loanPolicy = new StandardLoanPolicy(14);        // 14 day loan period
         FinePolicy finePolicy = new StandardFinePolicy(50);     // 50 pence per day fine
         Library library = new Library(loanPolicy, finePolicy);

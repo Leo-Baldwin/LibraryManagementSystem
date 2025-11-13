@@ -1,7 +1,7 @@
 package common;
 
 /**
- * Used to indicate that a business rule or validation constraint within the system has been violated.
+ * Exception thrown to indicate that a business rule or validation constraint within the system has been violated.
  */
 public class ValidationException extends RuntimeException {
 

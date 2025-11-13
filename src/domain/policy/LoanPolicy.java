@@ -3,7 +3,7 @@ package domain.policy;
 import java.time.LocalDate;
 
 /**
- * Interface class for calculating a loans due date.
+ * Interface for calculating a loans due date.
  */
 public interface LoanPolicy {
 

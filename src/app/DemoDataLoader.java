@@ -22,8 +22,9 @@ import java.util.function.Consumer;
 public class DemoDataLoader {
 
     private DemoDataLoader() {
-        // Empty constructor to prevent instantiation of utility class
+        // Private constructor to prevent instantiation of utility class
     }
+
 
     public static void loadDemoData(Library library) {
         loadCsv("resources/data/members.csv",   new MemberFactory(),   library::addMember);
@@ -41,7 +42,7 @@ public class DemoDataLoader {
         }
     }
 
-    // Reads from src/main/resources
+    // Reads from src/resources/data
     private static List<String[]> readCsv(String classpath) {
         List<String[]> rows = new ArrayList<>();
         try {

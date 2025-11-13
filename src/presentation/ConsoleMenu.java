@@ -1,4 +1,4 @@
-package presentation.console;
+package presentation;
 
 import common.ValidationException;
 import domain.model.*;
@@ -9,18 +9,25 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * Console based user interface for interacting with the {@link Library}.
+ */
 public class ConsoleMenu {
 
     private final Library library;
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in); // Creates scanner object to allow input
 
     public ConsoleMenu(Library library) {
-        this.library = library;
+        this.library = library; // Loads the library
     }
 
+    /**
+     * Initiates the main menu loop and processes user inputs until they choose to exit.
+     */
     public void run() {
         boolean running = true;
         while (running) {
+            // Display the console menu
             System.out.println();
             System.out.println("---Library System---\n");
             System.out.println("""
@@ -37,6 +44,7 @@ public class ConsoleMenu {
             System.out.println("7. Exit\n");
             System.out.print("Enter your choice: ");
 
+            // Get users choice
             String choice = scanner.nextLine().trim();
 
             try {
@@ -75,7 +83,7 @@ public class ConsoleMenu {
     }
 
 
-    public void listItems(Library library) {
+    private void listItems(Library library) {
         System.out.println("\nMedia Items Catalogue:\n");
 
         for (MediaItem item : library.listItems()) {
@@ -86,7 +94,7 @@ public class ConsoleMenu {
         pause();
     }
 
-    public void listMembers(Library library) {
+    private void listMembers(Library library) {
         System.out.println("\nMembers Catalogue:\n");
 
         for (Member member : library.listMembers()) {
@@ -97,7 +105,7 @@ public class ConsoleMenu {
         pause();
     }
 
-    public void loanItem(Library library) {
+    private void loanItem(Library library) {
         try {
             String mq  = readLine("Search for member by name");
             Member member = selectFromList(
@@ -146,7 +154,7 @@ public class ConsoleMenu {
         }
     }
 
-    public void returnItem(Library library) {
+    private void returnItem(Library library) {
         try {
             String q = readLine("Search for item to return (title/author)");
             MediaItem item = selectFromList(
@@ -186,7 +194,7 @@ public class ConsoleMenu {
         }
     }
 
-    public void placeReservation(Library library) {
+    private void placeReservation(Library library) {
         try {
             String mq =  readLine("Search for member by name");
             Member member = selectFromList(
@@ -235,7 +243,7 @@ public class ConsoleMenu {
         }
     }
 
-    public void addBook(Library library) {
+    private void addBook(Library library) {
         try {
             String title = readLine("Enter Book Title: ");
             String author = readLine("Enter Book Author: ");
@@ -245,7 +253,7 @@ public class ConsoleMenu {
             int yearOfPublication = scanner.nextInt();
             scanner.nextLine();
 
-            String categoriesInput = readLine("Enter Book Categories (seperated by a comma): ");
+            String categoriesInput = readLine("Enter Book Categories (separated by a comma): ");
             List<String> categories = categoriesInput.isEmpty()
                     ? List.of()
                     : List.of(categoriesInput.split("\\s*,\\s*"));
@@ -349,10 +357,9 @@ public class ConsoleMenu {
         }
         System.out.println("----------------------------------------");
         System.out.println();
-        String answer = readLine("Confirm? (Y/n)").toLowerCase();
+        String answer = readLine("Confirm? (Y/n, Enter = cancel)").toLowerCase();
         System.out.println();
-
-        return answer.equals("y") || answer.equals("yes") || answer.isBlank();
+        return answer.equals("y") || answer.equals("yes");
     }
 
     private static String shortId(UUID id) {
