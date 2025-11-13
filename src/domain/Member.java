@@ -33,7 +33,7 @@ public class Member extends Person {
      */
     public Member(String name, String email, boolean activeMember) {
         super(name, email);
-        this.activeMember = activeMember;
+        setActiveMember(activeMember);
     }
 
     /** @return {@code true} if the member is active */

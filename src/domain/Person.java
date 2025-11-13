@@ -31,7 +31,7 @@ public abstract class Person {
      */
     protected Person(String name, String email) {
         this.id = UUID.randomUUID(); // Generates a random unique identifier number
-        this.name = name;
+        setName(name);
         setEmail(email); // Validation handled in setter
     }
 

@@ -28,11 +28,12 @@ public class ConsoleMenu {
                      the menu below.
                     """);
             System.out.println("1. List all media");
-            System.out.println("2. Loan item");
-            System.out.println("3. Return item");
-            System.out.println("4. Place reservation");
-            System.out.println("5. Add new book");
-            System.out.println("6. Exit\n");
+            System.out.println("2. List all members");
+            System.out.println("3. Loan item");
+            System.out.println("4. Return item");
+            System.out.println("5. Place reservation");
+            System.out.println("6. Add new book");
+            System.out.println("7. Exit\n");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine().trim();
@@ -43,27 +44,30 @@ public class ConsoleMenu {
                         listItems(library);
                         break;
                     case "2":
-                        loanItem(library);
+                        listMembers(library);
                         break;
                     case "3":
-                        returnItem(library);
+                        loanItem(library);
                         break;
                     case "4":
-                        placeReservation(library);
+                        returnItem(library);
                         break;
                     case "5":
-                        addBook(library);
+                        placeReservation(library);
                         break;
                     case "6":
+                        addBook(library);
+                        break;
+                    case "7":
                         running = false;
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter 1-6.");
+                        System.out.println("Invalid choice. Please enter 1-7.");
                 }
             } catch (ValidationException e) {
                 System.out.println("Error: " + e.getMessage());
             } catch (CancelledOperationException e) {
-                System.out.println("Cancelled. Returning to menu...\n");
+                System.out.println("Cancelled. Returning to menu.\n");
             }
         }
         System.out.println("\nExiting Library Management System...");
@@ -81,9 +85,19 @@ public class ConsoleMenu {
         pause();
     }
 
+    public void listMembers(Library library) {
+        System.out.println("\nMembers Catalogue:\n");
+
+        for (Member member : library.listMembers()) {
+            System.out.println(member);
+            System.out.println();
+        }
+
+        pause();
+    }
+
     public void loanItem(Library library) {
         try {
-            System.out.println();
             String mq  = readLine("Search for member by name");
             Member member = selectFromList(
                     library.searchMembers(mq),
@@ -91,7 +105,6 @@ public class ConsoleMenu {
                     this::fmtMember
             );
 
-            System.out.println();
             String iq  = readLine("Search for item by title/author");
             MediaItem item = selectFromList(
                     library.searchMedia(iq),
@@ -105,7 +118,9 @@ public class ConsoleMenu {
             ));
 
             if (!cfm) {
-                System.out.println("Cancelled. Returning to menu...\n");
+                System.out.println("Cancelled. Returning to menu.\n");
+                System.out.println();
+                pause();
                 return;
             }
 
@@ -120,11 +135,13 @@ public class ConsoleMenu {
             pause();
 
         } catch (CancelledOperationException ignored) {
-            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println("Cancelled. Returning to menu.");
             System.out.println();
+            pause();
         } catch (ValidationException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage() + ".\nReturning to menu.");
             System.out.println();
+            pause();
         }
     }
 
@@ -142,12 +159,14 @@ public class ConsoleMenu {
             ));
 
             if (!cfm) {
-                System.out.println("Cancelled. Returning to menu...\n");
+                System.out.println("Cancelled. Returning to menu.");
+                System.out.println();
+                pause();
                 return;
             }
 
             Loan loan = library.returnItem(item.getMediaId());
-            System.out.println("Loan returned successfully.");
+            System.out.println("Loan returned successfully.\n");
             System.out.println("Receipt:");
             System.out.println("  Item:  " + item.getTitle());
             System.out.println("  Fine:  " + String.format("£%.2f", loan.getFineAccrued() / 100.0));
@@ -156,10 +175,13 @@ public class ConsoleMenu {
             pause();
 
         } catch (CancelledOperationException ignored) {
-            System.out.println("Cancelled. Returning to menu...\n");
-        } catch (ValidationException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Cancelled. Returning to menu.");
             System.out.println();
+            pause();
+        } catch (ValidationException e) {
+            System.out.println("Error: " + e.getMessage() + "\nReturning to menu.");
+            System.out.println();
+            pause();
         }
     }
 
@@ -185,12 +207,14 @@ public class ConsoleMenu {
             ));
 
             if (!cfm) {
-                System.out.println("Cancelled. Returning to menu...\n");
+                System.out.println("Cancelled. Returning to menu.");
+                System.out.println();
+                pause();
                 return;
             }
 
             Reservation reservation = library.placeReservation(member.getId(), item.getMediaId());
-            System.out.println("Reservation placed.");
+            System.out.println("Reservation placed.\n");
             System.out.println("Receipt:");
             System.out.println("  Member: " + member.getName());
             System.out.println("  Item:   " + item.getTitle());
@@ -200,11 +224,13 @@ public class ConsoleMenu {
             pause();
 
         } catch (CancelledOperationException ignored) {
-            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println("Cancelled. Returning to menu.");
             System.out.println();
+            pause();
         }  catch (ValidationException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage() + "\nReturning to menu.");
             System.out.println();
+            pause();
         }
     }
 
@@ -213,7 +239,8 @@ public class ConsoleMenu {
             String title = readLine("Enter Book Title: ");
             String author = readLine("Enter Book Author: ");
 
-            System.out.println("Enter Book Year of Publication: ");
+            System.out.println("\nEnter Book Year of Publication: ");
+
             int yearOfPublication = scanner.nextInt();
             scanner.nextLine();
 
@@ -230,7 +257,9 @@ public class ConsoleMenu {
             ));
 
             if (!cfm) {
-                System.out.println("Cancelled. Returning to menu...\n");
+                System.out.println("Cancelled. Returning to menu.");
+                System.out.println();
+                pause();
                 return;
             }
 
@@ -242,11 +271,13 @@ public class ConsoleMenu {
             pause();
 
         } catch (CancelledOperationException ignored) {
-            System.out.println("Cancelled. Returning to menu...\n");
+            System.out.println("Cancelled. Returning to menu.");
             System.out.println();
+            pause();
         } catch (ValidationException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage() + "\nReturning to menu.");
             System.out.println();
+            pause();
         }
     }
 
@@ -254,27 +285,13 @@ public class ConsoleMenu {
 
     private boolean isCancelled(String s) {
         return s.isBlank() || switch  (s.toLowerCase()) {
-            case "cancel", "quit", "q", "exit" -> true;
+            case "cancel", "quit", "q", "exit" -> true; //
             default -> false;
         };
     }
 
-    private UUID readUUID(String prompt) {
-        while (true) {
-            System.out.print(prompt + " (Press Enter to cancel): ");
-            String input = scanner.nextLine().trim();
-            if (isCancelled(input)) throw new CancelledOperationException();
-
-            try {
-                return UUID.fromString(input);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error: " + e.getMessage());
-                System.out.println();
-            }
-        }
-    }
-
     private String readLine(String prompt) {
+        System.out.println();
         System.out.print(prompt + " (Press Enter to cancel): ");
         String input = scanner.nextLine().trim();
 
@@ -294,8 +311,10 @@ public class ConsoleMenu {
             throw new CancelledOperationException();
         }
 
+        System.out.println();
         System.out.println("----------------------------------------");
         System.out.println(heading);
+        System.out.println();
         for (int i = 0; i < options.size(); i++) {
             System.out.printf("%d) %s%n", i + 1, displayFormatter.apply(options.get(i)));
         }
@@ -321,11 +340,17 @@ public class ConsoleMenu {
     }
 
     private boolean confirm(String title, List<String> lines) {
+        System.out.println();
         System.out.println("----------------------------------------");
         System.out.println(title);
-        for (String line : lines) System.out.println("  " + line);
+        System.out.println();
+        for (String line : lines) {
+            System.out.println("  " + line);
+        }
         System.out.println("----------------------------------------");
         String answer = readLine("Confirm? (Y/n)").toLowerCase();
+        System.out.println();
+
         return answer.equals("y") || answer.equals("yes") || answer.isBlank();
     }
 
