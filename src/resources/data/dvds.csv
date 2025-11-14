@@ -1,23 +1,23 @@
 title,year,duration,ageRating,categories
 Toy Story,1995,81,3+,Animation|Disney
 The Godfather,1972,175,18,Crime|Drama
-The Shawshank Redemption,1994,15,Drama|Crime
-The Godfather,1972,18,Crime|Drama
-The Dark Knight,2008,12A,Action|Superhero
-Inception,2010,12A,Science Fiction|Thriller
-Gladiator,2000,15,Action|Historical
-Interstellar,2014,12A,Science Fiction|Drama
-The Matrix,1999,15,Science Fiction|Action
-Pulp Fiction,1994,18,Crime|Drama
-Saving Private Ryan,1998,15,War|Drama
-Fight Club,1999,18,Drama|Thriller
-The Silence of the Lambs,1991,18,Thriller|Crime
-Forrest Gump,1994,12,Drama|Romance
-The Lord of the Rings: The Fellowship of the Ring,2001,12,Fantasy|Adventure
-The Lord of the Rings: The Two Towers,2002,12,Fantasy|Adventure
-The Lord of the Rings: The Return of the King,2003,12,Fantasy|Adventure
-Avatar,2009,12A,Science Fiction|Adventure
-The Departed,2006,18,Crime|Thriller
-Shutter Island,2010,15,Thriller|Mystery
-Titanic,1997,12,Drama|Romance
-Mad Max: Fury Road,2015,15,Action|Post-Apocalyptic
+The Shawshank Redemption,1994,142,15,Drama|Crime
+The Godfather,1972,175,18,Crime|Drama
+The Dark Knight,2008,152,12A,Action|Superhero
+Inception,2010,148,12A,Science Fiction|Thriller
+Gladiator,2000,155,15,Action|Historical
+Interstellar,2014,169,12A,Science Fiction|Drama
+The Matrix,1999,136,15,Science Fiction|Action
+Pulp Fiction,1994,154,18,Crime|Drama
+Saving Private Ryan,1998,169,15,War|Drama
+Fight Club,1999,139,18,Drama|Thriller
+The Silence of the Lambs,1991,118,18,Thriller|Crime
+Forrest Gump,1994,142,12,Drama|Romance
+The Lord of the Rings: The Fellowship of the Ring,2001,178,12,Fantasy|Adventure
+The Lord of the Rings: The Two Towers,2002,179,12,Fantasy|Adventure
+The Lord of the Rings: The Return of the King,2003,201,12,Fantasy|Adventure
+Avatar,2009,162,12A,Science Fiction|Adventure
+The Departed,2006,151,18,Crime|Thriller
+Shutter Island,2010,138,15,Thriller|Mystery
+Titanic,1997,195,12,Drama|Romance
+Mad Max: Fury Road,2015,120,15,Action|Post-Apocalyptic

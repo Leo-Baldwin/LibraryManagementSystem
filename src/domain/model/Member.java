@@ -24,18 +24,6 @@ public class Member extends Person {
         this.activeMember = true; // default to active
     }
 
-    /**
-     * Constructs a Member with explicit activation state.
-     *
-     * @param name the member's full name
-     * @param email the member's email address
-     * @param activeMember {@code true} if the member is currently active
-     */
-    public Member(String name, String email, boolean activeMember) {
-        super(name, email);
-        setActiveMember(activeMember);
-    }
-
     /** @return {@code true} if the member is active */
     public boolean isActiveMember() {
         return activeMember;

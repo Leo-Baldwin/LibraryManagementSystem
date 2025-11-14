@@ -357,7 +357,7 @@ public class ConsoleMenu {
         }
         System.out.println("----------------------------------------");
         System.out.println();
-        String answer = readLine("Confirm? (Y/n, Enter = cancel)").toLowerCase();
+        String answer = readLine("Confirm? (Y/n,)").toLowerCase();
         System.out.println();
         return answer.equals("y") || answer.equals("yes");
     }
