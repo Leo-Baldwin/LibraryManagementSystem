@@ -75,8 +75,6 @@ public class ConsoleMenu {
                 }
             } catch (ValidationException e) {
                 System.out.println("Error: " + e.getMessage());
-            } catch (CancelledOperationException e) {
-                System.out.println("Cancelled. Returning to menu.\n");
             }
         }
         System.out.println("\nExiting Library Management System...");
