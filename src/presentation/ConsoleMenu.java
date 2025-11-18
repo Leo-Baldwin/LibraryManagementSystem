@@ -246,10 +246,14 @@ public class ConsoleMenu {
             String title = readLine("Enter Book Title: ");
             String author = readLine("Enter Book Author: ");
 
-            System.out.println("\nEnter Book Year of Publication: ");
+            String yearInput = readLine("Enter Book Year of Publication");
+            int yearOfPublication;
 
-            int yearOfPublication = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                yearOfPublication = Integer.parseInt(yearInput);
+            } catch (NumberFormatException e) {
+                throw new ValidationException("Year must be a number");
+            }
 
             String categoriesInput = readLine("Enter Book Categories (separated by a comma): ");
             List<String> categories = categoriesInput.isEmpty()
