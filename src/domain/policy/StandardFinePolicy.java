@@ -14,7 +14,12 @@ public class StandardFinePolicy implements FinePolicy {
      * @param pencePerDay fine per day in pence
      */
     public StandardFinePolicy(int pencePerDay) {
-        this.pencePerDay = pencePerDay;
+
+        if (pencePerDay <= 0) {
+            throw new IllegalArgumentException("pencePerDay must be positive");
+        } else {
+            this.pencePerDay = pencePerDay;
+        }
     }
 
     /** @return fine value in pence */
