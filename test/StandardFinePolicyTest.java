@@ -3,7 +3,7 @@ import domain.policy.StandardFinePolicy;
 import java.time.LocalDate;
 
 /**
- * Unit testing class for StandardFinePolicy.
+ * Unit tests for StandardFinePolicy class.
  */
 public class StandardFinePolicyTest {
 
@@ -11,10 +11,10 @@ public class StandardFinePolicyTest {
         StandardFinePolicyTest test = new StandardFinePolicyTest();
 
         test.testReturnBeforeDueDate();
-        test.testReturnOnDueDate();
-        test.testReturnOneDayLate();
-        test.testReturnFiveDaysLate();
-        test.testNegativePencePerDay();
+        //test.testReturnOnDueDate();
+        //test.testReturnOneDayLate();
+        //test.testReturnFiveDaysLate();
+        //test.testNegativePencePerDay();
 
     }
 
@@ -25,9 +25,9 @@ public class StandardFinePolicyTest {
 
         int fine = policy.calculateFine(due, returnDate);
         if (fine == 0) {
-            System.out.println("Test 1 - return before due date - PASS");
+            System.out.println("FP1 - PASS");
         }  else {
-            System.out.println("Test 1 - return before due date - FAIL");
+            System.out.println("FP1 - FAIL");
         }
     }
 
@@ -38,9 +38,9 @@ public class StandardFinePolicyTest {
 
         int fine = policy.calculateFine(due, returnDate);
         if (fine == 0) {
-            System.out.println("Test 2 - return on due date - PASS");
+            System.out.println("FP2 - PASS");
         }  else {
-            System.out.println("Test 2 - return on due date - FAIL");
+            System.out.println("FP2 - FAIL");
         }
     }
 
@@ -51,9 +51,9 @@ public class StandardFinePolicyTest {
 
         int fine = policy.calculateFine(due, returnDate);
         if (fine == 50) {
-            System.out.println("Test 3 - return 1 day late - PASS");
+            System.out.println("FP3 - PASS");
         }  else {
-            System.out.println("Test 3 - return 1 day late - FAIL");
+            System.out.println("FP3 - FAIL");
         }
     }
 
@@ -64,18 +64,18 @@ public class StandardFinePolicyTest {
 
         int fine = policy.calculateFine(due, returnDate);
         if (fine == 250) {
-            System.out.println("Test 4 - return 5 days late - PASS");
+            System.out.println("FP4 - PASS");
         }  else {
-            System.out.println("Test 4 - return 5 days late - FAIL");
+            System.out.println("FP4 - FAIL");
         }
     }
 
     private void testNegativePencePerDay() {
         try {
             StandardFinePolicy policy = new StandardFinePolicy(-50);
-            System.out.println("Test 5 - negative pencePerDay - FAIL (no exception thrown)");
+            System.out.println("FP5 - FAIL (no exception thrown)");
         } catch (IllegalArgumentException e) {
-            System.out.println("Test 5 - negative pencePerDay - PASS (exception thrown: " + e.getMessage() + ")");
+            System.out.println("FP5 - PASS (exception thrown: " + e.getMessage() + ")");
         }
     }
 

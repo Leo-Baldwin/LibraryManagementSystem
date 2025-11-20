@@ -85,7 +85,7 @@ public class Loan {
             throw new IllegalArgumentException("Current Date cannot be null.");
         }
         // Returns true only if loan is still outstanding and past due date
-        return status == LoanStatus.OUTSTANDING && currentDate.isAfter(loanDate);
+        return status == LoanStatus.OUTSTANDING && currentDate.isAfter(dueDate);
     }
 
     /**
