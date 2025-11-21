@@ -11,10 +11,10 @@ public class StandardFinePolicyTest {
         StandardFinePolicyTest test = new StandardFinePolicyTest();
 
         test.testReturnBeforeDueDate();
-        //test.testReturnOnDueDate();
-        //test.testReturnOneDayLate();
-        //test.testReturnFiveDaysLate();
-        //test.testNegativePencePerDay();
+        test.testReturnOnDueDate();
+        test.testReturnOneDayLate();
+        test.testReturnFiveDaysLate();
+        test.testNegativePencePerDay();
 
     }
 

@@ -12,12 +12,12 @@ public class LoanTest {
     public static void main(String[] args) {
         LoanTest test = new LoanTest();
         test.testMarkReturnedSetsStatusAndDate();
-        //test.testMarkReturnedCannotBeCalledTwice();
-        //test.testIsOverdueFalseBeforeDueDate();
-        //test.testIsOverdueTrueAfterDueDate();
-        //test.testIsOverdueRejectsNullCurrentDate();
-        //test.testSetFineAccruedRejectsNegative();
-        //test.testSetFineAccruedStoresPositive();
+        test.testMarkReturnedCannotBeCalledTwice();
+        test.testIsOverdueFalseBeforeDueDate();
+        test.testIsOverdueTrueAfterDueDate();
+        test.testIsOverdueRejectsNullCurrentDate();
+        test.testSetFineAccruedRejectsNegative();
+        test.testSetFineAccruedStoresPositive();
     }
 
     private Loan testLoan(LocalDate loanDate, LocalDate dueDate) {
